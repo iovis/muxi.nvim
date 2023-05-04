@@ -1,0 +1,23 @@
+# TODO
+
+- [ ] Add a `config` object
+    - [ ] Holds `muxi_path`
+- [ ] Add a `setup` function
+- [ ] Add bookmark
+- [ ] Go to bookmark
+- [ ] ~Clear bookmarks for this project~
+    - [ ] Clear everything too?
+- [ ] Delete bookmark or just manage in popup?
+    - [ ] Both?
+- [ ] Popup with bookmarks?
+    - [ ] not modifiable, similar to muxi's
+    - [ ] `q` closes
+    - [ ] `<cr>` go to file
+    - [ ] `d` deletes?
+    - [ ] `c|r` changes? What about conflicts?
+    - [ ] Should I just map the keys to go to?
+        - How to delete then? fzf-lua does `<c-x>`
+- [ ] (Maybe for development) Show lua table for current project
+    - [ ] Reset `muxi[cwd]` to the buffer contents before leaving the buffer
+    - [ ] Can I prevent closing the buffer if the config is invalid?
+- [ ] Update marks on buffer or vim leave?

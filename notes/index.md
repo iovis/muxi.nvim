@@ -1,5 +1,4 @@
 # TODO
-
 - [ ] Add a `config` object
     - [ ] Holds `muxi_path`
 - [ ] Add a `setup` function
@@ -21,3 +20,14 @@
     - [ ] Reset `muxi[cwd]` to the buffer contents before leaving the buffer
     - [ ] Can I prevent closing the buffer if the config is invalid?
 - [ ] Update marks on buffer or vim leave?
+
+
+# Bindings
+- [ ] Allow user to bind specific bindings?
+    - [ ] `muxi.go_to("j")`
+- [ ] Listen for a keystroke
+    - [ ] If it exists, go there
+    - [ ] Else set current to that key?
+```lua
+vim.print("key is: " .. vim.fn.getcharstr())
+```

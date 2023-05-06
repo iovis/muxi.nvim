@@ -1,6 +1,7 @@
+---@class Muxi
 local muxi = {}
 
--- Re-exports
+----Re-exports
 muxi.test = require("muxi.test").test
 
 ---@class MuxiConfig
@@ -11,6 +12,7 @@ muxi.config = {
 ---@param opts MuxiConfig
 muxi.setup = function(opts)
 	opts = opts or {}
+
 	muxi.config = vim.tbl_deep_extend("force", muxi.config, opts)
 end
 

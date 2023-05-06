@@ -1,8 +1,12 @@
 # TODO
-- [ ] Add a `config` object
-    - [ ] Holds `muxi_path`
-- [ ] Add a `setup` function
+- [x] Add a `config` object
+    - [x] Holds `muxi_path`
+- [x] Add a `setup` function
 - [ ] Add bookmark
+    - [ ] Should probably re-read the file before writing, to mitigate syncing issues:
+        - Re-source the file
+        - Add the key
+        - Write the file
 - [ ] Go to bookmark
 - [ ] ~Clear bookmarks for this project~
     - [ ] Clear everything too?

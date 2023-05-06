@@ -13,31 +13,11 @@ Example payload
 ]]
 local M = {}
 
+local fs = require("muxi.fs")
+
 function M.test()
 	vim.cmd("messages clear")
 	-----------------------------------------
-
-	---- Managing files
-	-- :h uv_fs_t
-	local function read_file_sync(path)
-		local fd = vim.loop.fs_open(path, "r", 438)
-		local data = nil
-
-		if fd then
-			local stat = assert(vim.loop.fs_fstat(fd))
-			data = assert(vim.loop.fs_read(fd, stat.size, 0)) --[[@as string]]
-			assert(vim.loop.fs_close(fd))
-		end
-
-		return data
-	end
-
-	local function write_file_sync(path, data)
-		local fd = assert(vim.loop.fs_open(path, "w", 438))
-
-		assert(vim.loop.fs_write(fd, data))
-		assert(vim.loop.fs_close(fd))
-	end
 
 	---@param str string
 	local function is_empty(str)
@@ -48,7 +28,7 @@ function M.test()
 	print("---- Init muxi")
 	local muxi_path = vim.fn.stdpath("data") .. "/muxi.json"
 
-	local data = read_file_sync(muxi_path)
+	local data = fs.read_file_sync(muxi_path)
 	print("synchronous read", data)
 
 	local muxi = {}
@@ -121,7 +101,7 @@ function M.test()
 
 	---- Save to file
 	print("---- Write to file")
-	write_file_sync(muxi_path, json)
+	fs.write_file_sync(muxi_path, json)
 
 	-----------------------------------------
 	vim.cmd("R! messages")

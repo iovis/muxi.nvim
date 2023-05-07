@@ -81,7 +81,6 @@ function muxi.delete_prompt()
 		end,
 	}, function(mark)
 		muxi.delete(mark.key)
-		vim.notify(string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2]))
 	end)
 end
 

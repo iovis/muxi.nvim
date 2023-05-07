@@ -48,6 +48,14 @@ function muxi.go_to(key)
 	vim.api.nvim_win_set_cursor(0, mark.pos)
 end
 
+---Clear current project
+function muxi.clear_all()
+	-- Re-source to avoid synchronization issues
+	muxi:init()
+	muxi.sessions[muxi.cwd] = nil
+	muxi:save()
+end
+
 --TODO: move
 ---@param str string
 local function is_empty(str)

@@ -2,13 +2,13 @@
 - [x] Add a `config` object
     - [x] Holds `muxi_path`
 - [x] Add a `setup` function
-- [ ] Add bookmark
-    - [ ] `muxi.add("j")`
-    - [ ] Should probably re-read the file before writing, to mitigate syncing issues:
+- [x] Add bookmark
+    - [x] `muxi.add("j")`
+    - [x] Should probably re-read the file before writing, to mitigate syncing issues:
         - Re-source the file
         - Add the key
         - Write the file
-- [ ] Go to bookmark
+- [x] Go to bookmark
 - [ ] ~Clear bookmarks for this project~
     - [ ] Clear everything too?
 - [ ] Delete bookmark or just manage in popup?
@@ -25,6 +25,7 @@
     - [ ] Reset `muxi[cwd]` to the buffer contents before leaving the buffer
     - [ ] Can I prevent closing the buffer if the config is invalid?
 - [ ] Update marks on buffer or vim leave?
+    - [ ] Maybe a `config` option?
 
 
 # Bindings
@@ -44,4 +45,13 @@
     - [ ] Else ask to set current file to that key?
 ```lua
 vim.print("key is: " .. vim.fn.getcharstr())
+```
+
+# Notes
+
+## Measuring time
+```lua
+local start = vim.fn.reltime()
+-- your code
+print(vim.fn.reltimestr(vim.fn.reltime(start)))
 ```

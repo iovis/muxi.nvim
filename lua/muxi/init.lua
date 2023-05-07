@@ -20,6 +20,34 @@ function muxi.setup(opts)
 	muxi:init()
 end
 
+---Add the current file to a key
+---@param key string
+function muxi.add(key)
+	-- Re-source to avoid synchronization issues
+	muxi:init()
+
+	muxi.sessions[muxi.cwd][key] = {
+		file = vim.fn.expand("%"),
+		pos = vim.api.nvim_win_get_cursor(0),
+	}
+
+	muxi:save()
+end
+
+---Go to session
+---@param key string
+function muxi.go_to(key)
+	local mark = muxi.sessions[muxi.cwd][key]
+
+	if not mark then
+		vim.notify("No mark found for " .. key)
+		return
+	end
+
+	vim.cmd.edit(mark.file)
+	vim.api.nvim_win_set_cursor(0, mark.pos)
+end
+
 --TODO: move
 ---@param str string
 local function is_empty(str)
@@ -53,27 +81,10 @@ function muxi:init()
 	end
 end
 
----Add the current file to a key
----@param key string
-function muxi.add(key)
-	muxi.sessions[muxi.cwd][key] = {
-		file = vim.fn.expand("%"),
-		pos = vim.api.nvim_win_get_cursor(0),
-	}
-end
+function muxi:save()
+	local json = vim.json.encode(muxi.sessions)
 
----Go to session
----@param key string
-function muxi.go_to(key)
-	local mark = muxi.sessions[muxi.cwd][key]
-
-	if not mark then
-		vim.notify("No mark found for " .. key)
-		return
-	end
-
-	vim.cmd.edit(mark.file)
-	vim.api.nvim_win_set_cursor(0, mark.pos)
+	fs.write_file_sync(self.config.path, json)
 end
 
 return muxi

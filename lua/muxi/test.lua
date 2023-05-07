@@ -20,18 +20,18 @@ function M.test()
 	-----------------------------------------
 
 	---- Init muxi
-	print("---- Init muxi")
-	local muxi = require("muxi")
-
-	muxi.setup({})
-
-	vim.print("muxi: ", muxi.sessions)
+	-- print("---- Init muxi")
+	-- local muxi = require("muxi")
+	--
+	-- muxi.setup({})
+	--
+	-- vim.print("muxi: ", muxi.sessions)
 
 	---- Save bookmark for current file
-	print("---- Save key")
-	muxi.add("k")
-
-	vim.print("muxi: ", muxi.sessions)
+	-- print("---- Save key")
+	-- muxi.add("k")
+	--
+	-- vim.print("muxi: ", muxi.sessions)
 
 	---- Navigating to bookmark
 	-- print("---- Navigating to key")
@@ -66,14 +66,14 @@ function M.test()
 	vim.print("muxi: ", muxi)
 
 	---- JSON encode the muxi table
-	print("---- JSON encode")
-
-	local json = vim.json.encode(muxi)
-	vim.print("json: ", json)
+	-- print("---- JSON encode")
+	--
+	-- local json = vim.json.encode(muxi)
+	-- vim.print("json: ", json)
 
 	---- Save to file
-	print("---- Write to file")
-	fs.write_file_sync(muxi_path, json)
+	-- print("---- Write to file")
+	-- fs.write_file_sync(muxi_path, json)
 end
 
 return M

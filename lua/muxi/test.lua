@@ -19,42 +19,20 @@ function M.test()
 	vim.cmd("messages clear")
 	-----------------------------------------
 
-	---@param str string
-	local function is_empty(str)
-		return vim.fn.empty(str) == 1
-	end
-
 	---- Init muxi
 	print("---- Init muxi")
-	local muxi_path = vim.fn.stdpath("data") .. "/muxi.json"
+	local muxi = require("muxi")
 
-	local data = fs.read_file_sync(muxi_path)
-	print("synchronous read", data)
+	muxi.setup({})
 
-	local muxi = {}
-	if not is_empty(data) then
-		muxi = vim.json.decode(data, { luanil = { object = true, array = true } }) --[[@as table]]
-	end
+	vim.print("muxi: ", muxi.sessions)
 
-	vim.print("muxi: ", muxi)
-
-	---- Initialize muxi table for current directory
-	print("---- Init current directory")
-	local cwd = vim.loop.cwd()
-
-	if not cwd then
-		vim.notify("[muxi] ERROR: no current directory", vim.log.levels.ERROR)
+	-----------------------------------------
+	if true then
+		vim.cmd("R! messages")
+		vim.cmd("se ft=lua")
 		return
 	end
-
-	if not muxi[cwd] then
-		muxi[cwd] = {}
-	end
-
-	-- Seems like lua does references, not copy. Good to know
-	local current = muxi[cwd]
-
-	vim.print("muxi: ", muxi)
 
 	---- Save bookmark for current file
 	print("---- Save key")
@@ -102,10 +80,6 @@ function M.test()
 	---- Save to file
 	print("---- Write to file")
 	fs.write_file_sync(muxi_path, json)
-
-	-----------------------------------------
-	vim.cmd("R! messages")
-	vim.cmd("se ft=lua")
 end
 
 return M

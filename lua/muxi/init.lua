@@ -23,15 +23,20 @@ end
 ---Add the current file to a key
 ---@param key string
 function muxi.add(key)
-	-- Re-source to avoid synchronization issues
-	muxi:init()
+	muxi:sync(function(m)
+		m.sessions[m.cwd][key] = {
+			file = vim.fn.expand("%"),
+			pos = vim.api.nvim_win_get_cursor(0),
+		}
+	end)
+end
 
-	muxi.sessions[muxi.cwd][key] = {
-		file = vim.fn.expand("%"),
-		pos = vim.api.nvim_win_get_cursor(0),
-	}
-
-	muxi:save()
+---Delete mark
+---@param key string
+function muxi.delete(key)
+	muxi:sync(function(m)
+		m.sessions[m.cwd][key] = nil
+	end)
 end
 
 ---Go to session
@@ -50,10 +55,9 @@ end
 
 ---Clear current project
 function muxi.clear_all()
-	-- Re-source to avoid synchronization issues
-	muxi:init()
-	muxi.sessions[muxi.cwd] = nil
-	muxi:save()
+	muxi:sync(function(m)
+		m.sessions[m.cwd] = nil
+	end)
 end
 
 ---Clear all projects
@@ -99,6 +103,15 @@ function muxi:save()
 	local json = vim.json.encode(muxi.sessions)
 
 	fs.write_file_sync(self.config.path, json)
+end
+
+---Run a callback that syncs the store
+---@param fn fun(muxi: Muxi): nil
+function muxi:sync(fn)
+	-- Re-source to avoid synchronization issues
+	self:init()
+	fn(self)
+	self:save()
 end
 
 return muxi

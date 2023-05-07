@@ -11,8 +11,7 @@
 - [x] Go to bookmark
 - [x] Clear bookmarks for this project
     - [x] Clear everything too?
-- [ ] Delete bookmark or just manage in popup?
-    - [/] Both?
+- [x] Delete bookmark
 - [ ] Popup with bookmarks?
     - [ ] not modifiable, similar to muxi's
     - [ ] `q` closes
@@ -29,10 +28,10 @@
 # Bindings
 
 1. Use chooses their own bindings:
-- [ ] Allow user to bind specific bindings?
+- [x] Allow user to bind specific bindings?
     - [x] `muxi.add("j")`
     - [x] `muxi.go_to("j")`
-    - [ ] `muxi.list_sessions()`
+    - [x] `muxi.list_sessions()`
     - [x] `muxi.clear_all()`
 
 2. Super binding?

@@ -98,8 +98,13 @@ function muxi.go_to(key)
 		return
 	end
 
+	-- TODO: Check if file still exists?
 	vim.cmd.edit(mark.file)
-	vim.api.nvim_win_set_cursor(0, mark.pos)
+
+	local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
+	if not cursor_ok then
+		vim.notify("[muxi] position doesn't exist anymore!")
+	end
 end
 
 function muxi.go_to_prompt()

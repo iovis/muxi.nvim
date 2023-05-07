@@ -5,7 +5,7 @@ local fs = require("muxi.fs")
 ---@field pos number[]
 
 ---@class Muxi
----@field sessions table<string, Mark[]>
+---@field marks Mark[]
 local muxi = {}
 
 ---@class MuxiConfig
@@ -26,77 +26,27 @@ end
 ---@param key string
 function muxi.add(key)
 	muxi:sync(function(m)
-		if not m.sessions[m.cwd] then
-			m.sessions[m.cwd] = {}
-		end
-
-		m.sessions[m.cwd][key] = {
+		m.marks[key] = {
 			file = vim.fn.expand("%"),
 			pos = vim.api.nvim_win_get_cursor(0),
 		}
 	end)
 end
 
----Delete mark
----@param key string
-function muxi.delete(key)
-	muxi:sync(function(m)
-		m.sessions[m.cwd][key] = nil
-
-		-- Clean project if empty
-		if vim.tbl_isempty(m.sessions[m.cwd]) then
-			m.sessions[m.cwd] = nil
-		end
-	end)
-end
-
---TODO: move out
-local function get_current_marks_for_selection()
-	local muxi_marks = muxi.sessions[muxi.cwd] or {}
-	local marks = {}
-
-	for key, value in pairs(muxi_marks) do
-		table.insert(marks, { key = key, file = value.file, pos = value.pos })
-	end
-
-	table.sort(marks, function(a, b)
-		return a.key < b.key
-	end)
-
-	return marks
-end
-
-function muxi.delete_prompt()
-	local marks = get_current_marks_for_selection()
-
-	if vim.tbl_isempty(marks) then
-		vim.notify("No marks for this session!")
-		return
-	end
-
-	vim.ui.select(marks, {
-		prompt = "Select mark to delete: ",
-		format_item = function(mark)
-			return string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2])
-		end,
-	}, function(mark)
-		muxi.delete(mark.key)
-	end)
-end
-
 ---Go to session
 ---@param key string
 function muxi.go_to(key)
-	local mark = muxi.sessions[muxi.cwd][key]
+	local mark = muxi.marks[key]
 
 	if not mark then
 		vim.notify("No mark found for " .. key)
 		return
 	end
 
-	-- TODO: Check if file still exists?
+	-- TODO: Check if file still exists? It'll open a new buffer otherwise
 	vim.cmd.edit(mark.file)
 
+	-- Navigate cursor
 	local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
 	if not cursor_ok then
 		vim.notify("[muxi] position doesn't exist anymore!")
@@ -106,28 +56,18 @@ function muxi.go_to(key)
 	vim.cmd("norm! zz")
 end
 
-function muxi.go_to_prompt()
-	local marks = get_current_marks_for_selection()
-
-	if vim.tbl_isempty(marks) then
-		vim.notify("No marks for this session!")
-		return
-	end
-
-	vim.ui.select(marks, {
-		prompt = "muxi: ",
-		format_item = function(mark)
-			return string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2])
-		end,
-	}, function(mark)
-		muxi.go_to(mark.key)
+---Delete mark
+---@param key string
+function muxi.delete(key)
+	muxi:sync(function(m)
+		m.marks[key] = nil
 	end)
 end
 
 ---Clear current project
 function muxi.clear_all()
 	muxi:sync(function(m)
-		m.sessions[m.cwd] = nil
+		m.marks = {}
 	end)
 end
 
@@ -136,47 +76,33 @@ function muxi.nuke()
 	vim.fn.delete(muxi.config.path)
 end
 
---TODO: move out
----@param str string
-local function is_empty(str)
-	return vim.fn.empty(str) == 1
-end
-
 function muxi:init()
-	local cwd = vim.loop.cwd()
-	if not cwd then
-		vim.notify("[muxi] ERROR: no current directory", vim.log.levels.ERROR)
-		return
-	end
-
-	self.cwd = cwd
-	self.sessions = {}
-
-	local data = fs.read_file_sync(self.config.path)
-
-	if not is_empty(data) then
-		-- TODO: Should I just keep the current session's data here?
-		-- TODO: Error handling
-		local stored_sessions = vim.json.decode(data, {
-			luanil = { object = true, array = true },
-		}) --[[@as table]]
-
-		self.sessions = vim.tbl_deep_extend("force", self.sessions, stored_sessions)
-	end
+	local cwd = fs.cwd()
+	self.marks = fs.read_stored_sessions(self.config.path)[cwd] or {}
 end
 
+-- TODO: Could be async
 function muxi:save()
-	local json = vim.json.encode(muxi.sessions)
+	-- Read all the sessions to avoid sync issues
+	local cwd = fs.cwd()
+	local sessions = fs.read_stored_sessions(self.config.path)
 
+	-- We're the source of truth for the current session
+	if vim.tbl_isempty(self.marks) then
+		sessions[cwd] = nil -- clean up project if no marks
+	else
+		sessions[cwd] = self.marks
+	end
+
+	local json = vim.json.encode(sessions)
 	fs.write_file_sync(self.config.path, json)
 end
 
 ---Run a callback that syncs the store
 ---@param fn fun(muxi: Muxi): nil
 function muxi:sync(fn)
-	-- Re-source to avoid synchronization issues
-	self:init()
 	fn(self)
+
 	self:save()
 end
 

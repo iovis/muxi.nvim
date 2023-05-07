@@ -17,7 +17,7 @@ function muxi.setup(opts)
 
 	muxi.config = vim.tbl_deep_extend("force", muxi.config, opts)
 
-  muxi:init()
+	muxi:init()
 end
 
 --TODO: move
@@ -51,6 +51,15 @@ function muxi:init()
 	if not self.sessions[self.cwd] then
 		self.sessions[self.cwd] = {}
 	end
+end
+
+---Add the current file to a key
+---@param key string
+function muxi.add(key)
+	muxi.sessions[muxi.cwd][key] = {
+		file = vim.fn.expand("%"),
+		pos = vim.api.nvim_win_get_cursor(0),
+	}
 end
 
 return muxi

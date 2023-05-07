@@ -3,6 +3,7 @@
     - [x] Holds `muxi_path`
 - [x] Add a `setup` function
 - [ ] Add bookmark
+    - [ ] `muxi.add("j")`
     - [ ] Should probably re-read the file before writing, to mitigate syncing issues:
         - Re-source the file
         - Add the key
@@ -27,11 +28,20 @@
 
 
 # Bindings
+
+1. Use chooses their own bindings:
 - [ ] Allow user to bind specific bindings?
+    - [ ] `muxi.add("j")`
     - [ ] `muxi.go_to("j")`
+    - [ ] `muxi.list_sessions()`
+    - [ ] `muxi.clear_project()`
+    - [ ] `muxi.clear_all()`
+
+2. Super binding?
 - [ ] Listen for a keystroke
-    - [ ] If it exists, go there
-    - [ ] Else set current to that key?
+    - [ ] If it exists and it's not current file, go there
+    - [ ] If it's current file, ask to delete?
+    - [ ] Else ask to set current file to that key?
 ```lua
 vim.print("key is: " .. vim.fn.getcharstr())
 ```

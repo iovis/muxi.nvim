@@ -27,24 +27,18 @@ function M.test()
 
 	vim.print("muxi: ", muxi.sessions)
 
+	---- Save bookmark for current file
+	print("---- Save key")
+	muxi.add("k")
+
+	vim.print("muxi: ", muxi.sessions)
+
 	-----------------------------------------
 	if true then
 		vim.cmd("R! messages")
 		vim.cmd("se ft=lua")
 		return
 	end
-
-	---- Save bookmark for current file
-	print("---- Save key")
-	local key = "j"
-
-	-- muxi[pwd][key] = {
-	current[key] = {
-		file = vim.fn.expand("%"),
-		pos = vim.api.nvim_win_get_cursor(0),
-	}
-
-	vim.print("muxi: ", muxi)
 
 	---- Navigating to bookmark
 	print("---- Navigating to key")

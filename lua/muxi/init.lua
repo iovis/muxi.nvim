@@ -1,6 +1,11 @@
 local fs = require("muxi.fs")
 
+---@class Mark
+---@field file string
+---@field pos number[]
+
 ---@class Muxi
+---@field sessions table<string, Mark[]>
 local muxi = {}
 
 ----Re-exports
@@ -24,6 +29,10 @@ end
 ---@param key string
 function muxi.add(key)
 	muxi:sync(function(m)
+		if not m.sessions[m.cwd] then
+			m.sessions[m.cwd] = {}
+		end
+
 		m.sessions[m.cwd][key] = {
 			file = vim.fn.expand("%"),
 			pos = vim.api.nvim_win_get_cursor(0),
@@ -36,6 +45,35 @@ end
 function muxi.delete(key)
 	muxi:sync(function(m)
 		m.sessions[m.cwd][key] = nil
+
+		-- Clean project if empty
+		if vim.tbl_isempty(m.sessions[m.cwd]) then
+			m.sessions[m.cwd] = nil
+		end
+	end)
+end
+
+function muxi.delete_prompt()
+	local muxi_marks = muxi.sessions[muxi.cwd]
+	local marks = {}
+
+	for key, value in pairs(muxi_marks) do
+		table.insert(marks, { key = key, file = value.file, pos = value.pos })
+	end
+
+	if vim.tbl_isempty(marks) then
+		vim.notify("No marks for this session!")
+		return
+	end
+
+	vim.ui.select(marks, {
+		prompt = "Select mark to delete: ",
+		format_item = function(mark)
+			return string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2])
+		end,
+	}, function(mark)
+		muxi.delete(mark.key)
+		vim.notify(string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2]))
 	end)
 end
 
@@ -60,18 +98,25 @@ function muxi.clear_all()
 	end)
 end
 
----Clear all projects
+---Delete muxi storage (clear all sessions)
 function muxi.nuke()
 	vim.fn.delete(muxi.config.path)
 end
 
---TODO: move
+--TODO: move out
 ---@param str string
 local function is_empty(str)
 	return vim.fn.empty(str) == 1
 end
 
 function muxi:init()
+	local cwd = vim.loop.cwd()
+	if not cwd then
+		vim.notify("[muxi] ERROR: no current directory", vim.log.levels.ERROR)
+		return
+	end
+
+	self.cwd = cwd
 	self.sessions = {}
 
 	local data = fs.read_file_sync(self.config.path)
@@ -84,18 +129,6 @@ function muxi:init()
 		}) --[[@as table]]
 
 		self.sessions = vim.tbl_deep_extend("force", self.sessions, stored_sessions)
-	end
-
-	local cwd = vim.loop.cwd()
-	if not cwd then
-		vim.notify("[muxi] ERROR: no current directory", vim.log.levels.ERROR)
-		return
-	end
-
-	self.cwd = cwd
-
-	if not self.sessions[self.cwd] then
-		self.sessions[self.cwd] = {}
 	end
 end
 

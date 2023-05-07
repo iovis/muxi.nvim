@@ -53,13 +53,24 @@ function muxi.delete(key)
 	end)
 end
 
-function muxi.delete_prompt()
-	local muxi_marks = muxi.sessions[muxi.cwd]
+--TODO: move out
+local function get_current_marks_for_selection()
+	local muxi_marks = muxi.sessions[muxi.cwd] or {}
 	local marks = {}
 
 	for key, value in pairs(muxi_marks) do
 		table.insert(marks, { key = key, file = value.file, pos = value.pos })
 	end
+
+	table.sort(marks, function(a, b)
+		return a.key < b.key
+	end)
+
+	return marks
+end
+
+function muxi.delete_prompt()
+	local marks = get_current_marks_for_selection()
 
 	if vim.tbl_isempty(marks) then
 		vim.notify("No marks for this session!")
@@ -89,6 +100,24 @@ function muxi.go_to(key)
 
 	vim.cmd.edit(mark.file)
 	vim.api.nvim_win_set_cursor(0, mark.pos)
+end
+
+function muxi.go_to_prompt()
+	local marks = get_current_marks_for_selection()
+
+	if vim.tbl_isempty(marks) then
+		vim.notify("No marks for this session!")
+		return
+	end
+
+	vim.ui.select(marks, {
+		prompt = "muxi: ",
+		format_item = function(mark)
+			return string.format("[%s]: %s:%d:%d", mark.key, mark.file, mark.pos[1], mark.pos[2])
+		end,
+	}, function(mark)
+		muxi.go_to(mark.key)
+	end)
 end
 
 ---Clear current project

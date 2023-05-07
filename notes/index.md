@@ -40,7 +40,9 @@
     - [ ] If it's current file, ask to delete?
     - [ ] Else ask to set current file to that key?
 ```lua
-vim.print("key is: " .. vim.fn.getcharstr())
+vim.keymap.set("n", "gm", function ()
+  vim.print("key is: " .. vim.pesc(vim.fn.getcharstr()))
+end)
 ```
 
 # Notes

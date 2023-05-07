@@ -8,9 +8,6 @@ local fs = require("muxi.fs")
 ---@field sessions table<string, Mark[]>
 local muxi = {}
 
-----Re-exports
-muxi.test = require("muxi.test").test
-
 ---@class MuxiConfig
 muxi.config = {
 	path = vim.fn.stdpath("data") .. "/muxi.json",
@@ -105,6 +102,9 @@ function muxi.go_to(key)
 	if not cursor_ok then
 		vim.notify("[muxi] position doesn't exist anymore!")
 	end
+
+	-- Center cursor
+	vim.cmd("norm! zz")
 end
 
 function muxi.go_to_prompt()

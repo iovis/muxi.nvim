@@ -33,20 +33,20 @@ function M.test()
 
 	vim.print("muxi: ", muxi.sessions)
 
+	---- Navigating to bookmark
+	-- print("---- Navigating to key")
+	--
+	-- local pos = current[key].pos
+	--
+	-- vim.print("pos: ", pos)
+	-- vim.api.nvim_win_set_cursor(0, pos)
+
 	-----------------------------------------
 	if true then
 		vim.cmd("R! messages")
 		vim.cmd("se ft=lua")
 		return
 	end
-
-	---- Navigating to bookmark
-	print("---- Navigating to key")
-
-	local pos = current[key].pos
-
-	vim.print("pos: ", pos)
-	vim.api.nvim_win_set_cursor(0, pos)
 
 	---- Cleaning up a bookmark
 	if false then

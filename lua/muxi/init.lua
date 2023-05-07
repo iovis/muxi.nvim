@@ -62,4 +62,18 @@ function muxi.add(key)
 	}
 end
 
+---Go to session
+---@param key string
+function muxi.go_to(key)
+	local mark = muxi.sessions[muxi.cwd][key]
+
+	if not mark then
+		vim.notify("No mark found for " .. key)
+		return
+	end
+
+	vim.cmd.edit(mark.file)
+	vim.api.nvim_win_set_cursor(0, mark.pos)
+end
+
 return muxi

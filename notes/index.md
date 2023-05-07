@@ -9,10 +9,10 @@
         - Add the key
         - Write the file
 - [x] Go to bookmark
-- [ ] ~Clear bookmarks for this project~
-    - [ ] Clear everything too?
+- [x] Clear bookmarks for this project
+    - [x] Clear everything too?
 - [ ] Delete bookmark or just manage in popup?
-    - [ ] Both?
+    - [/] Both?
 - [ ] Popup with bookmarks?
     - [ ] not modifiable, similar to muxi's
     - [ ] `q` closes
@@ -21,9 +21,7 @@
     - [ ] `c|r` changes? What about conflicts?
     - [ ] Should I just map the keys to go to?
         - How to delete then? fzf-lua does `<c-x>`
-- [ ] (Maybe for development) Show lua table for current project
-    - [ ] Reset `muxi[cwd]` to the buffer contents before leaving the buffer
-    - [ ] Can I prevent closing the buffer if the config is invalid?
+- [x] (Maybe for development) Show lua table for current project
 - [ ] Update marks on buffer or vim leave?
     - [ ] Maybe a `config` option?
 
@@ -32,11 +30,10 @@
 
 1. Use chooses their own bindings:
 - [ ] Allow user to bind specific bindings?
-    - [ ] `muxi.add("j")`
-    - [ ] `muxi.go_to("j")`
+    - [x] `muxi.add("j")`
+    - [x] `muxi.go_to("j")`
     - [ ] `muxi.list_sessions()`
-    - [ ] `muxi.clear_project()`
-    - [ ] `muxi.clear_all()`
+    - [x] `muxi.clear_all()`
 
 2. Super binding?
 - [ ] Listen for a keystroke

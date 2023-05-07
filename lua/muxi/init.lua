@@ -56,6 +56,11 @@ function muxi.clear_all()
 	muxi:save()
 end
 
+---Clear all projects
+function muxi.nuke()
+	vim.fn.delete(muxi.config.path)
+end
+
 --TODO: move
 ---@param str string
 local function is_empty(str)
@@ -69,6 +74,7 @@ function muxi:init()
 
 	if not is_empty(data) then
 		-- TODO: Should I just keep the current session's data here?
+		-- TODO: Error handling
 		local stored_sessions = vim.json.decode(data, {
 			luanil = { object = true, array = true },
 		}) --[[@as table]]

@@ -55,28 +55,38 @@ function M.marks()
 		previewer = MuxiPreviewer,
 		actions = {
 			default = function(selected, _)
-				local key = selected[1]:match("%[(.-)%]")
-				muxi.go_to(key)
+				for _, item in ipairs(selected) do
+					local key = item:match("%[(.-)%]")
+					muxi.go_to(key)
+				end
 			end,
 			["ctrl-s"] = function(selected, _)
-				local key = selected[1]:match("%[(.-)%]")
-				vim.cmd.new()
-				muxi.go_to(key)
+				for _, item in ipairs(selected) do
+					local key = item:match("%[(.-)%]")
+					vim.cmd.new()
+					muxi.go_to(key)
+				end
 			end,
 			["ctrl-v"] = function(selected, _)
-				local key = selected[1]:match("%[(.-)%]")
-				vim.cmd.vnew()
-				muxi.go_to(key)
+				for _, item in ipairs(selected) do
+					local key = item:match("%[(.-)%]")
+					vim.cmd.vnew()
+					muxi.go_to(key)
+				end
 			end,
 			["ctrl-t"] = function(selected, _)
-				local key = selected[1]:match("%[(.-)%]")
-				vim.cmd.tabnew()
-				muxi.go_to(key)
+				for _, item in ipairs(selected) do
+					local key = item:match("%[(.-)%]")
+					vim.cmd.tabnew()
+					muxi.go_to(key)
+				end
 			end,
 			["ctrl-x"] = {
 				function(selected, _)
-					local key = selected[1]:match("%[(.-)%]")
-					muxi.delete(key)
+					for _, item in ipairs(selected) do
+						local key = item:match("%[(.-)%]")
+						muxi.delete(key)
+					end
 				end,
 				fzf_actions.resume,
 			},

@@ -5,21 +5,11 @@
 - [x] Add bookmark
     - [x] `muxi.add("j")`
     - [x] Should probably re-read the file before writing, to mitigate syncing issues:
-        - Re-source the file
-        - Add the key
-        - Write the file
 - [x] Go to bookmark
 - [x] Clear bookmarks for this project
     - [x] Clear everything too?
 - [x] Delete bookmark
-- [ ] Popup with bookmarks?
-    - [ ] not modifiable, similar to muxi's
-    - [ ] `q` closes
-    - [ ] `<cr>` go to file
-    - [ ] `d` deletes?
-    - [ ] `c|r` changes? What about conflicts?
-    - [ ] Should I just map the keys to go to?
-        - How to delete then? fzf-lua does `<c-x>`
+- [x] Integrate with fzf-lua
 - [x] (Maybe for development) Show lua table for current project
 - [ ] Update marks on buffer or vim leave?
     - [ ] Maybe a `config` option?
@@ -39,6 +29,7 @@
     - [ ] If it exists and it's not current file, go there
     - [ ] If it's current file, ask to delete?
     - [ ] Else ask to set current file to that key?
+
 ```lua
 vim.keymap.set("n", "gm", function ()
   vim.print("key is: " .. vim.pesc(vim.fn.getcharstr()))

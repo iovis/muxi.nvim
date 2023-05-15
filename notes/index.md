@@ -10,9 +10,13 @@
     - [x] Clear everything too?
 - [x] Delete bookmark
 - [x] Integrate with fzf-lua
+    - [ ] Try to make it a bit closer to `buffers`
+        - [ ] File icons/colors
+        - [ ] Maybe color muxi key?
 - [x] (Maybe for development) Show lua table for current project
-- [ ] Update marks on buffer or vim leave?
-    - [ ] Maybe a `config` option?
+- [_] Update marks on buffer or vim leave?
+    - Wouldn't it defeat the purpose? You're able to put multiple marks on the same file
+    - And if someone has `save_cursor: false` then it'll just go to the last position
 
 
 # Bindings

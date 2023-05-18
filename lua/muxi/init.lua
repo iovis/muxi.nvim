@@ -91,6 +91,7 @@ function muxi:save()
   local sessions = fs.read_stored_sessions(self.config.path)
 
   -- We're the source of truth for the current session
+  self.marks = self.marks or {}
   if vim.tbl_isempty(self.marks) then
     sessions[cwd] = nil -- clean up project if no marks
   else

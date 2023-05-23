@@ -30,11 +30,10 @@ local function is_empty(str)
   return vim.fn.empty(str) == 1
 end
 
---TODO: move out
 ---@param path string
 ---@return table<string, Mark[]>
 function M.read_stored_sessions(path)
-  local data = read_file_sync(path)
+  local data = vim.trim(read_file_sync(path))
 
   if is_empty(data) then
     return {}

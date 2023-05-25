@@ -11,7 +11,7 @@ local muxi = require("muxi")
 
 muxi.setup({
   path = "muxi.json",
-  save_cursor = false,
+  go_to_cursor = false,
 })
 
 ----Playground

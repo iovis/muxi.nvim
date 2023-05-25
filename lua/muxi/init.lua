@@ -11,7 +11,7 @@ local muxi = {}
 ---@class MuxiConfig
 muxi.config = {
   path = vim.fn.stdpath("data") .. "/muxi.json",
-  save_cursor = true,
+  go_to_cursor = true,
 }
 
 ---@param opts MuxiConfig
@@ -48,7 +48,7 @@ function muxi.go_to(key)
   vim.cmd.edit(mark.file)
 
   -- Navigate cursor
-  if muxi.config.save_cursor then
+  if muxi.config.go_to_cursor then
     local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
     if not cursor_ok then
       vim.notify("[muxi] position doesn't exist anymore!")

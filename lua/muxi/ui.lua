@@ -36,9 +36,13 @@ function M.show()
     group = augroup_muxi,
     buffer = bufnr,
     callback = function()
-      -- Poor man's eval
-      local new_marks_string = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
-      local new_marks = load(table.concat({ "return", new_marks_string }, " "))()
+      local new_marks_string = vim.trim(table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n"))
+
+      if vim.fn.empty(new_marks_string) == 1 then
+        new_marks_string = "{}"
+      end
+
+      local new_marks = assert(vim.fn.luaeval(new_marks_string))
 
       muxi:sync(function(m)
         m.marks = new_marks

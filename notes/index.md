@@ -1,8 +1,5 @@
 ## TODO
 
-- [ ] Rename `config.save_cursor` to `config.go_to_cursor`
-  - [ ] Make `muxi.go_to()` take `opts.cursor: boolean?`
-    - [ ] By default is `config.cursor`
 - [ ] [[##Superbinding Example]] Binding that listens for a keystroke
   - [ ] If it's uppercase: set mark
   - [ ] If it's lowercase and mark exists: go there
@@ -25,6 +22,9 @@
   - [x] Clear everything too?
 - [x] Delete bookmark
 - [x] (Maybe for development) Show lua table for current project
+- [x] Rename `config.save_cursor` to `config.go_to_cursor`
+  - [x] Make `muxi.go_to()` take `opts.cursor: boolean?`
+    - [x] By default is `config.cursor`
 
 ### Canceled
 

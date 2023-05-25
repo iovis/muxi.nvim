@@ -34,9 +34,13 @@ function muxi.add(key)
   end)
 end
 
+---@class GoToOpts
+---@field go_to_cursor? boolean
+
 ---Go to session
 ---@param key string
-function muxi.go_to(key)
+---@param opts? GoToOpts
+function muxi.go_to(key, opts)
   local mark = muxi.marks[key]
 
   if not mark then
@@ -47,8 +51,10 @@ function muxi.go_to(key)
   -- TODO: Check if file still exists? It'll open a new buffer otherwise
   vim.cmd.edit(mark.file)
 
-  -- Navigate cursor
-  if muxi.config.go_to_cursor then
+  -- Navigate to cursor
+  local config = vim.tbl_deep_extend("force", muxi.config, opts or {})
+
+  if config.go_to_cursor then
     local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
     if not cursor_ok then
       vim.notify("[muxi] position doesn't exist anymore!")

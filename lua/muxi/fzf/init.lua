@@ -10,18 +10,22 @@ local muxi = require("muxi")
 
 local fzf_actions = require("fzf-lua.actions")
 local MuxiPreviewer = require("muxi.fzf.previewer")
+local MuxiMarkRow = require("muxi.fzf.row")
 
 function M.marks()
   fzf_lua.fzf_exec(function(fzf_cb)
-    local marks = {}
+    local rows = {}
 
-    for key, value in pairs(muxi.marks) do
-      table.insert(marks, string.format("[%s] %s", key, value.file))
+    for key, mark in pairs(muxi.marks) do
+      table.insert(rows, MuxiMarkRow:new(key, mark))
     end
 
-    table.sort(marks)
+    -- Sort rows by mark key
+    table.sort(rows, function(a, b)
+      return a.key < b.key
+    end)
 
-    for _, mark in ipairs(marks) do
+    for _, mark in ipairs(rows) do
       fzf_cb(mark)
     end
 

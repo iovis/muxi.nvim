@@ -33,7 +33,7 @@ end
 ---@param path string
 ---@return table<string, Mark[]>
 function M.read_stored_sessions(path)
-  local data = vim.trim(read_file_sync(path))
+  local data = vim.trim(read_file_sync(path) or "")
 
   if is_empty(data) then
     return {}

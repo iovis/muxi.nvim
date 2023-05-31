@@ -2,8 +2,24 @@
 local M = {}
 local muxi = require("muxi")
 
+---Use vim.ui.input to mark the current file
+function M.add()
+  vim.ui.input({ prompt = "Muxi key> " }, function(input)
+    local key = vim.trim(input or "")
+
+    if vim.fn.empty(key) == 1 then
+      return
+    end
+
+    muxi.add(key)
+
+    vim.notify("Added current file to " .. key)
+  end)
+end
+
+---Show an interactive popup to edit your marks
 function M.show()
-  -- Turn muxi marks into a pretty array of strings
+  -- Serialize muxi marks into a pretty array of strings
   local marks_table = vim.split(vim.inspect(muxi.marks), "\n")
 
   -- Make a popup window
@@ -70,6 +86,7 @@ local function get_current_marks_for_selection()
   return marks
 end
 
+---Use vim.ui.select to delete a mark
 function M.delete_prompt()
   local marks = get_current_marks_for_selection()
 
@@ -88,6 +105,7 @@ function M.delete_prompt()
   end)
 end
 
+---Use vim.ui.select to go to a mark
 function M.go_to_prompt()
   local marks = get_current_marks_for_selection()
 

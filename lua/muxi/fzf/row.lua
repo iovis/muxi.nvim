@@ -17,7 +17,7 @@ function MuxiMarkRow:new(key, mark)
 
   ---@diagnostic disable-next-line: redefined-local
   self.__tostring = function(self)
-    return ("[%s] %s"):format(self.key, self.mark.file)
+    return ("[%s] %s:%d"):format(self.key, self.mark.file, self.mark.pos[1])
   end
 
   return setmetatable(instance, self)

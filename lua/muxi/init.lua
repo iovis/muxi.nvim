@@ -5,7 +5,7 @@ local fs = require("muxi.fs")
 ---@field pos number[]
 
 ---@class Muxi
----@field marks Mark[]
+---@field marks table<string, Mark>
 local muxi = {}
 
 ---@class MuxiConfig

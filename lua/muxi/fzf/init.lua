@@ -18,13 +18,26 @@ M.default_opts = {
   git_icons = true,
   previewer = "builtin",
   actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
-    -- TODO: "ctrl-g": to toggle `go to cursor`
+    ["ctrl-g"] = { actions.toggle_go_to_cursor, fzf_lua.actions.resume },
     ["ctrl-x"] = { actions.delete_key, fzf_lua.actions.resume },
   }),
   -- actions listed below will be converted to fzf's 'reload'
   reload_actions = {
     [actions.delete_key] = true,
+    [actions.toggle_go_to_cursor] = true,
   },
+}
+
+-- stylua: ignore
+local fzf_header_labels = {
+  ("<%s> to %s"):format(
+    fzf_lua.utils.ansi_codes.yellow("ctrl-x"),
+    fzf_lua.utils.ansi_codes.red("delete")
+  ),
+  ("<%s> to %s"):format(
+    fzf_lua.utils.ansi_codes.yellow("ctrl-g"),
+    fzf_lua.utils.ansi_codes.red("toggle cursor")
+  ),
 }
 
 ---Show muxi marks in fzf-lua
@@ -40,13 +53,12 @@ function M.marks(opts)
   ----Help
   -- Register custom labels for help menu
   fzf_lua.config.set_action_helpstr(actions.delete_key, "delete-muxi-key")
+  fzf_lua.config.set_action_helpstr(actions.toggle_go_to_cursor, "toggle-muxi-cursor")
 
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then
-    local key = fzf_lua.utils.ansi_codes.yellow("ctrl-x")
-    local action = fzf_lua.utils.ansi_codes.red("delete")
-    -- TODO: "ctrl-g": toggle go to cursor
-    opts.fzf_opts["--header"] = vim.fn.shellescape((":: <%s> to %s"):format(key, action))
+    local header = (":: %s"):format(table.concat(fzf_header_labels, " | "))
+    opts.fzf_opts["--header"] = vim.fn.shellescape(header)
   end
 
   ----Git status

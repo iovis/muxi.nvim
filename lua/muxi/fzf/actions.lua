@@ -9,4 +9,8 @@ function M.delete_key(selected)
   end
 end
 
+function M.toggle_go_to_cursor(_)
+  muxi.config.go_to_cursor = not muxi.config.go_to_cursor
+end
+
 return M

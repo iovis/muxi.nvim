@@ -18,6 +18,7 @@ function MuxiFzfRow:new(key, mark)
     filename = mark.file,
     lnum = mark.pos[1],
     col = mark.pos[2] + 1, -- 1-based instead of 0-based
+    -- text = "", -- put text after column number in fzf-lua
   }
 
   self.__index = self

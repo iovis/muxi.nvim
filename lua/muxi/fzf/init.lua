@@ -7,76 +7,86 @@ end
 
 local M = {}
 local muxi = require("muxi")
+local MuxiFzfRow = require("muxi.fzf.row")
 
-local fzf_actions = require("fzf-lua.actions")
-local MuxiPreviewer = require("muxi.fzf.previewer")
-local MuxiMarkRow = require("muxi.fzf.row")
+local action_delete_key = function(selected)
+  for _, item in ipairs(selected) do
+    local key = item:match("%[(.-)%]")
+    muxi.delete(key)
+  end
+end
 
-function M.marks()
-  fzf_lua.fzf_exec(function(fzf_cb)
-    local rows = {}
+local default_opts = {
+  prompt = "muxi> ",
+  file_icons = true,
+  color_icons = true,
+  git_icons = true, -- TODO: not working
+  previewer = "builtin",
+  actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
+    ["ctrl-x"] = {
+      action_delete_key,
+      fzf_lua.actions.resume,
+    },
+  }),
+  fzf_opts = {},
+}
 
+function M.marks(opts)
+  if vim.tbl_isempty(muxi.marks) then
+    vim.notify("No marks for this session", vim.log.levels.WARN)
+    return
+  end
+
+  opts = vim.tbl_deep_extend("force", default_opts, opts or {})
+
+  -- Register `action_delete_key` for help's label
+  fzf_lua.config.set_action_helpstr(action_delete_key, "delete-muxi-key")
+
+  -- FZF header (legend)
+  if opts.fzf_opts["--header"] == nil then
+    local key = fzf_lua.utils.ansi_codes.yellow("ctrl-x")
+    local action = fzf_lua.utils.ansi_codes.red("delete")
+    opts.fzf_opts["--header"] = vim.fn.shellescape((":: <%s> to %s"):format(key, action))
+  end
+
+  -- Generate rows for fzf
+  local contents = function(fzf_cb)
+    ---@type MuxiFzfRow[]
+    local entries = {}
+
+    -- Make a list of marks parseable by fzf
     for key, mark in pairs(muxi.marks) do
-      table.insert(rows, MuxiMarkRow:new(key, mark))
+      table.insert(entries, MuxiFzfRow:new(key, mark))
     end
 
-    -- Sort rows by mark key
-    table.sort(rows, function(a, b)
+    -- Sort entries by mark key
+    table.sort(entries, function(a, b)
       return a.key < b.key
     end)
 
-    for _, mark in ipairs(rows) do
-      fzf_cb(mark)
+    -- Send entries to fzf
+    for _, entry in ipairs(entries) do
+      local filename = entry.filename
+
+      -- If `go_to_cursor` is enabled, keep info about location
+      if muxi.config.go_to_cursor then
+        filename = fzf_lua.make_entry.lcol(entry, opts)
+      end
+
+      local file_entry = fzf_lua.make_entry.file(filename, opts)
+      local key = fzf_lua.utils.ansi_codes.yellow(entry.key)
+      local row = ("[%s] %s"):format(key, file_entry)
+
+      fzf_cb(row)
     end
 
-    fzf_cb()
-  end, {
-    prompt = "muxi> ",
-    ----Not working yet
-    -- git_icons = true,
-    -- file_icons = true,
-    -- color_icons = true,
-    ---------------------
-    previewer = MuxiPreviewer,
-    actions = {
-      default = function(selected, _)
-        for _, item in ipairs(selected) do
-          local key = item:match("%[(.-)%]")
-          muxi.go_to(key)
-        end
-      end,
-      ["ctrl-s"] = function(selected, _)
-        for _, item in ipairs(selected) do
-          local key = item:match("%[(.-)%]")
-          vim.cmd.new()
-          muxi.go_to(key)
-        end
-      end,
-      ["ctrl-v"] = function(selected, _)
-        for _, item in ipairs(selected) do
-          local key = item:match("%[(.-)%]")
-          vim.cmd.vnew()
-          muxi.go_to(key)
-        end
-      end,
-      ["ctrl-t"] = function(selected, _)
-        for _, item in ipairs(selected) do
-          local key = item:match("%[(.-)%]")
-          vim.cmd.tabnew()
-          muxi.go_to(key)
-        end
-      end,
-      ["ctrl-x"] = {
-        function(selected, _)
-          for _, item in ipairs(selected) do
-            local key = item:match("%[(.-)%]")
-            muxi.delete(key)
-          end
-        end,
-        fzf_actions.resume,
-      },
-    },
-  })
+    fzf_cb(nil)
+  end
+
+  -- TODO: Not sure what this is
+  -- opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")
+
+  fzf_lua.fzf_exec(contents, opts)
 end
 
 return M

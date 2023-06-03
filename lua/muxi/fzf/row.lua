@@ -1,16 +1,23 @@
----@class MuxiMarkRow
+---@class MuxiFzfRow
 ---@field key string
 ---@field mark Mark
-local MuxiMarkRow = {}
+---@field filename string for `fzf_lua.make_entry.lcol`
+---@field lnum number for `fzf_lua.make_entry.lcol`
+---@field col number for `fzf_lua.make_entry.lcol`
+local MuxiFzfRow = {}
 
----Initialize a new MarkRow
+---Initialize a new MuxiFzfRow
 ---@param key string
 ---@param mark Mark
----@return MuxiMarkRow
-function MuxiMarkRow:new(key, mark)
+---@return MuxiFzfRow
+function MuxiFzfRow:new(key, mark)
   local instance = {
     key = key,
     mark = mark,
+    -- The following are to satisfy the interface of `fzf_lua.make_entry.lcol`
+    filename = mark.file,
+    lnum = mark.pos[1],
+    col = mark.pos[2] + 1, -- 1-based instead of 0-based
   }
 
   self.__index = self
@@ -23,4 +30,4 @@ function MuxiMarkRow:new(key, mark)
   return setmetatable(instance, self)
 end
 
-return MuxiMarkRow
+return MuxiFzfRow

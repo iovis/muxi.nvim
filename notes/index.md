@@ -5,9 +5,24 @@
   - [ ] If it's lowercase and mark exists: go there
   - [ ] If it's lowercase and mark does not exist: notify it's not set
 - [x] Integrate with fzf-lua
-  - [ ] Try to make it a bit closer to `buffers`
-  - [ ] File icons/colors
-  - [ ] Maybe color muxi key?
+  - [x] Try to make it a bit closer to `buffers`
+  - [x] File icons/colors
+  - [x] Maybe color muxi key?
+  - [ ] [API Questions](https://github.com/ibhagwan/fzf-lua/issues/773#issuecomment-1574001862)
+    - [ ] `fzf_cb` should not be necessary
+      - I don't seem to be able to refresh the new list if I don't?
+    - [ ] `git_icons` is still not working
+      - `file_icons` and `color_icons` started working when using `make_entry.file`
+    - [ ] `opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")`
+      - not sure what this line means
+    - [x] `MuxiMarkRow` should not be necessary, there's no way around getting strings back because it's an external process
+      - Could still be useful to keep track of `mark.key`
+    - [x] `fzf.utils.strip_ansi_coloring` for escaping colors
+      - Looks like fzf_lua is doing the heavy lifting for me
+    - [x] `make_entry.file` for playing nice with the API
+    - [x] `fzf_opts --headed` for making legends
+    - [x] `config.set_action_helpstr(fn, helpstr)` for setting the help string of a custom action (but try to use native ones)
+    - [x] `dap_breakpoints` is a good one to copy
 
 ### Done
 

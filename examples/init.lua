@@ -18,11 +18,11 @@ muxi.setup({
 muxi.add("l")
 muxi.add("k")
 
-local MuxiMarkRow = require("muxi.fzf.row")
+local MuxiFzfRow = require("muxi.fzf.row")
 
 local rows = {}
 for key, mark in pairs(muxi.marks) do
-  table.insert(rows, MuxiMarkRow:new(key, mark))
+  table.insert(rows, MuxiFzfRow:new(key, mark))
 end
 
 vim.cmd("messages clear")

@@ -41,7 +41,7 @@ local fzf_header_labels = {
 }
 
 ---Show muxi marks in fzf-lua
----@param opts MuxiFzfOpts
+---@param opts? MuxiFzfOpts
 function M.marks(opts)
   if vim.tbl_isempty(muxi.marks) then
     vim.notify("No marks for this session", vim.log.levels.WARN)

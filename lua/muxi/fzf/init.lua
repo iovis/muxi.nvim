@@ -15,7 +15,7 @@ M.default_opts = {
   prompt = "muxi> ",
   file_icons = true,
   color_icons = true,
-  -- git_icons = true, -- TODO: not working
+  git_icons = true,
   previewer = "builtin",
   actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
     -- TODO: "ctrl-g": to toggle `go to cursor`
@@ -47,6 +47,11 @@ function M.marks(opts)
     local action = fzf_lua.utils.ansi_codes.red("delete")
     -- TODO: "ctrl-g": toggle go to cursor
     opts.fzf_opts["--header"] = vim.fn.shellescape((":: <%s> to %s"):format(key, action))
+  end
+
+  ----Git status
+  opts.fn_preprocess = function(o)
+    return fzf_lua.make_entry.preprocess(o)
   end
 
   ----Reload without flickering

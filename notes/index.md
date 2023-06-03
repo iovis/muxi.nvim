@@ -13,8 +13,9 @@
       - I don't seem to be able to refresh the new list if I don't?
     - [ ] `git_icons` is still not working
       - `file_icons` and `color_icons` started working when using `make_entry.file`
-    - [ ] `opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")`
+    - [x] `opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")`
       - not sure what this line means
+        - It's used for native previewers (bat) together with skim (rust version of fzf)
     - [x] `MuxiMarkRow` should not be necessary, there's no way around getting strings back because it's an external process
       - Could still be useful to keep track of `mark.key`
     - [x] `fzf.utils.strip_ansi_coloring` for escaping colors

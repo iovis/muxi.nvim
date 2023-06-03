@@ -83,9 +83,6 @@ function M.marks(opts)
     fzf_cb(nil)
   end
 
-  -- TODO: Not sure what this is
-  -- opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")
-
   fzf_lua.fzf_exec(contents, opts)
 end
 

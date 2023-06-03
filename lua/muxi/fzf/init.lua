@@ -7,14 +7,8 @@ end
 
 local M = {}
 local muxi = require("muxi")
+local actions = require("muxi.fzf.actions")
 local MuxiFzfRow = require("muxi.fzf.row")
-
-local action_delete_key = function(selected)
-  for _, item in ipairs(selected) do
-    local key = item:match("%[(.-)%]")
-    muxi.delete(key)
-  end
-end
 
 local default_opts = {
   prompt = "muxi> ",
@@ -24,7 +18,7 @@ local default_opts = {
   previewer = "builtin",
   actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
     ["ctrl-x"] = {
-      action_delete_key,
+      actions.delete_key,
       fzf_lua.actions.resume,
     },
   }),
@@ -39,8 +33,8 @@ function M.marks(opts)
 
   opts = vim.tbl_deep_extend("force", default_opts, opts or {})
 
-  -- Register `action_delete_key` for help's label
-  fzf_lua.config.set_action_helpstr(action_delete_key, "delete-muxi-key")
+  -- Register `actions.delete_key` for help's label
+  fzf_lua.config.set_action_helpstr(actions.delete_key, "delete-muxi-key")
 
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then

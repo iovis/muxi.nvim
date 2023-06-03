@@ -10,74 +10,89 @@ local muxi = require("muxi")
 local actions = require("muxi.fzf.actions")
 local MuxiFzfRow = require("muxi.fzf.row")
 
-local default_opts = {
+---@class MuxiFzfOpts
+M.default_opts = {
   prompt = "muxi> ",
   file_icons = true,
   color_icons = true,
-  git_icons = true, -- TODO: not working
+  -- git_icons = true, -- TODO: not working
   previewer = "builtin",
   actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
-    ["ctrl-x"] = {
-      actions.delete_key,
-      fzf_lua.actions.resume,
-    },
+    -- TODO: "ctrl-g": to toggle `go to cursor`
+    ["ctrl-x"] = { actions.delete_key, fzf_lua.actions.resume },
   }),
-  fzf_opts = {},
+  -- actions listed below will be converted to fzf's 'reload'
+  reload_actions = {
+    [actions.delete_key] = true,
+  },
 }
 
+---Show muxi marks in fzf-lua
+---@param opts MuxiFzfOpts
 function M.marks(opts)
   if vim.tbl_isempty(muxi.marks) then
     vim.notify("No marks for this session", vim.log.levels.WARN)
     return
   end
 
-  opts = vim.tbl_deep_extend("force", default_opts, opts or {})
+  opts = fzf_lua.config.normalize_opts(opts, M.default_opts)
 
-  -- Register `actions.delete_key` for help's label
+  ----Help
+  -- Register custom labels for help menu
   fzf_lua.config.set_action_helpstr(actions.delete_key, "delete-muxi-key")
 
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then
     local key = fzf_lua.utils.ansi_codes.yellow("ctrl-x")
     local action = fzf_lua.utils.ansi_codes.red("delete")
+    -- TODO: "ctrl-g": toggle go to cursor
     opts.fzf_opts["--header"] = vim.fn.shellescape((":: <%s> to %s"):format(key, action))
   end
 
-  -- Generate rows for fzf
-  local contents = function(fzf_cb)
-    ---@type MuxiFzfRow[]
-    local entries = {}
-
-    -- Make a list of marks parseable by fzf
-    for key, mark in pairs(muxi.marks) do
-      table.insert(entries, MuxiFzfRow:new(key, mark))
-    end
-
-    -- Sort entries by mark key
-    table.sort(entries, function(a, b)
-      return a.key < b.key
-    end)
-
-    -- Send entries to fzf
-    for _, entry in ipairs(entries) do
-      local filename = entry.filename
-
-      -- If `go_to_cursor` is enabled, keep info about location
-      if muxi.config.go_to_cursor then
-        filename = fzf_lua.make_entry.lcol(entry, opts)
-      end
-
-      local file_entry = fzf_lua.make_entry.file(filename, opts)
-      local key = fzf_lua.utils.ansi_codes.yellow(entry.key)
-      local row = ("[%s] %s"):format(key, file_entry)
-
-      fzf_cb(row)
-    end
-
-    fzf_cb(nil)
+  ----Reload without flickering
+  opts.__fn_reload = function(_)
+    return muxi:to_fzf_list(opts)
   end
 
+  -- build the "reload" cmd and remove '-- {+}' from the initial cmd
+  local reload = fzf_lua.shell.reload_action_cmd(opts, "{+}")
+  local contents = reload:gsub("%-%-%s+{%+}$", "")
+  opts = fzf_lua.core.convert_reload_actions(reload, opts)
+
+  ----Yield to fzf-lua
   fzf_lua.fzf_exec(contents, opts)
+end
+
+---Convert muxi marks to an fzf list (monkey patch)
+---@param opts MuxiFzfOpts
+---@return string[]
+function muxi:to_fzf_list(opts)
+  ---@type MuxiFzfRow[]
+  local entries = {}
+
+  -- Make a list of muxi marks parseable by fzf
+  for key, mark in pairs(self.marks) do
+    table.insert(entries, MuxiFzfRow:new(key, mark))
+  end
+
+  -- Sort entries by mark key
+  table.sort(entries, function(a, b)
+    return a.key < b.key
+  end)
+
+  -- Let fzf-lua do its magic with formatting
+  return vim.tbl_map(function(entry)
+    local filename = entry.filename
+
+    -- If `go_to_cursor` is enabled, keep info about location
+    if self.config.go_to_cursor then
+      filename = fzf_lua.make_entry.lcol(entry, opts)
+    end
+
+    local file_entry = fzf_lua.make_entry.file(filename, opts)
+    local key = fzf_lua.utils.ansi_codes.yellow(entry.key)
+    return ("[%s] %s"):format(key, file_entry)
+  end, entries)
 end
 
 return M

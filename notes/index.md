@@ -9,10 +9,11 @@
   - [x] File icons/colors
   - [x] Maybe color muxi key?
   - [ ] [API Questions](https://github.com/ibhagwan/fzf-lua/issues/773#issuecomment-1574001862)
-    - [ ] `fzf_cb` should not be necessary
-      - I don't seem to be able to refresh the new list if I don't?
+    - [x] Leverage fzf's `reload` for better UX
+    - [x] `fzf_cb` should not be necessary
     - [ ] `git_icons` is still not working
       - `file_icons` and `color_icons` started working when using `make_entry.file`
+      => You need to call `make_entry.preprocess` once before making any entries!
     - [x] `opts = fzf_lua.core.set_fzf_field_index(opts, 3, opts._is_skim and "{}" or "{..-2}")`
       - not sure what this line means
         - It's used for native previewers (bat) together with skim (rust version of fzf)

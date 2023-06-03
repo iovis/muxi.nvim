@@ -17,10 +17,14 @@ M.default_opts = {
   color_icons = true,
   git_icons = true,
   previewer = "builtin",
-  actions = vim.tbl_deep_extend("force", fzf_lua.defaults.actions.files, {
+  _actions = function()
+    -- Inherit current file actions (overridable by the user)
+    return fzf_lua.config.globals.actions.files
+  end,
+  actions = {
     ["ctrl-g"] = { actions.toggle_go_to_cursor, fzf_lua.actions.resume },
     ["ctrl-x"] = { actions.delete_key, fzf_lua.actions.resume },
-  }),
+  },
   -- actions listed below will be converted to fzf's 'reload'
   reload_actions = {
     [actions.delete_key] = true,

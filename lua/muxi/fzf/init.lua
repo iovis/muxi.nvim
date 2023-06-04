@@ -23,11 +23,13 @@ M.default_opts = {
   end,
   actions = {
     ["ctrl-g"] = { actions.toggle_go_to_cursor, fzf_lua.actions.resume },
+    ["ctrl-r"] = { actions.rename_key, fzf_lua.actions.resume },
     ["ctrl-x"] = { actions.delete_key, fzf_lua.actions.resume },
   },
   -- actions listed below will be converted to fzf's 'reload'
   reload_actions = {
     [actions.delete_key] = true,
+    [actions.rename_key] = true,
     [actions.toggle_go_to_cursor] = true,
   },
 }
@@ -41,6 +43,10 @@ local fzf_header_labels = {
   ("<%s> to %s"):format(
     fzf_lua.utils.ansi_codes.yellow("ctrl-g"),
     fzf_lua.utils.ansi_codes.red("toggle cursor")
+  ),
+  ("<%s> to %s"):format(
+    fzf_lua.utils.ansi_codes.yellow("ctrl-r"),
+    fzf_lua.utils.ansi_codes.red("rename")
   ),
 }
 
@@ -56,8 +62,9 @@ function M.marks(opts)
 
   ----Help
   -- Register custom labels for help menu
-  fzf_lua.config.set_action_helpstr(actions.delete_key, "delete-muxi-key")
-  fzf_lua.config.set_action_helpstr(actions.toggle_go_to_cursor, "toggle-muxi-cursor")
+  fzf_lua.config.set_action_helpstr(actions.delete_key, "muxi-delete-key")
+  fzf_lua.config.set_action_helpstr(actions.rename_key, "muxi-rename-key")
+  fzf_lua.config.set_action_helpstr(actions.toggle_go_to_cursor, "muxi-toggle-cursor")
 
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then

@@ -1,9 +1,16 @@
 ## TODO
 
-- [ ] [[##Superbinding Example]] Binding that listens for a keystroke
+- [!] [[##Superbinding Example]] Binding that listens for a keystroke
   - [ ] If it's uppercase: set mark
   - [ ] If it's lowercase and mark exists: go there
   - [ ] If it's lowercase and mark does not exist: notify it's not set
+- [ ] Make `:Muxi` commands (complete)
+  - [ ] `:Muxi add <key>`
+  - [ ] `:Muxi go <key>` (complete)
+  - [ ] `:Muxi delete <key>` (complete)
+  - [ ] `:Muxi reset`
+  - [ ] `:Muxi fzf`
+  - Maybe check neotree or lspsaga for the completion
 
 ### Done
 

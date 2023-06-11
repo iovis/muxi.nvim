@@ -1,6 +1,31 @@
 -- Experimental
 local M = {}
 local muxi = require("muxi")
+local util = require("muxi.util")
+
+---Muxi superbinding
+---If ASCII uppercase => save mark
+---else => go to mark
+function M.superbinding()
+  local char = util.get_char()
+
+  if not char then
+    return
+  end
+
+  -- If uppercase, set mark
+  if util.is_upper(char) then
+    local key = char:lower()
+
+    muxi.add(key)
+    vim.notify("Added current file to " .. key)
+
+    return
+  end
+
+  -- If lowercase, go to mark
+  require("muxi").go_to(char)
+end
 
 ---Use vim.ui.input to mark the current file
 function M.add()

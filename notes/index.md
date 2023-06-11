@@ -1,10 +1,5 @@
 ## TODO
 
-- [!] [[##Superbinding Example]] Binding that listens for a keystroke
-  - [ ] If it's uppercase: set mark
-  - [ ] If it's lowercase and mark exists: go there
-  - [ ] If it's lowercase and mark does not exist: notify it's not set
-
 ### Done
 
 - [x] Add a `config` object
@@ -50,6 +45,11 @@
   - [x] `:Muxi fzf`
   - Maybe check neotree or lspsaga for the completion
     - Lspsaga does it in lua
+- [x] [[##Superbinding Example]] Binding that listens for a keystroke
+  - [x] If it's uppercase: set mark
+  - [x] If it's lowercase and mark exists: go there
+  - [x] If it's lowercase and mark does not exist: notify it's not set
+  - Copy something like `mini.jump`
 
 ### Canceled
 
@@ -68,12 +68,12 @@
 
 1. Super binding?
 
-- [ ] Listen for a keystroke
-  - [ ] If it's uppercase: set mark
-  - [ ] If it's lowercase and mark exists: go there
-  - [ ] If it's lowercase and mark does not exist: notify it's not set
-  - [ ] ~If it's current file, ask to delete?~ => sounds annoying
-  - [ ] ~Else ask to set current file to that key?~ => sounds surprising
+- [x] Listen for a keystroke
+  - [x] If it's uppercase: set mark
+  - [x] If it's lowercase and mark exists: go there
+  - [x] If it's lowercase and mark does not exist: notify it's not set
+  - [_] ~If it's current file, ask to delete?~ => sounds annoying
+  - [_] ~Else ask to set current file to that key?~ => sounds surprising
 
 ### Superbinding Example
 

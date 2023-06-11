@@ -4,13 +4,6 @@
   - [ ] If it's uppercase: set mark
   - [ ] If it's lowercase and mark exists: go there
   - [ ] If it's lowercase and mark does not exist: notify it's not set
-- [ ] Make `:Muxi` commands (complete)
-  - [ ] `:Muxi add <key>`
-  - [ ] `:Muxi go <key>` (complete)
-  - [ ] `:Muxi delete <key>` (complete)
-  - [ ] `:Muxi reset`
-  - [ ] `:Muxi fzf`
-  - Maybe check neotree or lspsaga for the completion
 
 ### Done
 
@@ -49,6 +42,14 @@
     - [x] `fzf_opts --headed` for making legends
     - [x] `config.set_action_helpstr(fn, helpstr)` for setting the help string of a custom action (but try to use native ones)
     - [x] `dap_breakpoints` is a good one to copy
+- [x] Make `:Muxi` commands (complete)
+  - [x] `:Muxi add <key>`
+  - [x] `:Muxi go <key>` (complete)
+  - [x] `:Muxi delete <key>` (complete)
+  - [x] `:Muxi clear`
+  - [x] `:Muxi fzf`
+  - Maybe check neotree or lspsaga for the completion
+    - Lspsaga does it in lua
 
 ### Canceled
 

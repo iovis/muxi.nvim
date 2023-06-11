@@ -1,5 +1,17 @@
 ## TODO
 
+- [ ] Documentation
+  - [ ] Add README.md
+    - [ ] Acknowledgments
+      - [ ] Fzf-lua
+      - [ ] lspsaga
+      - [ ] mini.jump
+  - [ ] Generate vimdocs from README.md?
+- [ ] Cleanup
+  - [ ] `examples/`
+  - [ ] `tests/`
+  - [ ] `notes/`
+
 ### Done
 
 - [x] Add a `config` object

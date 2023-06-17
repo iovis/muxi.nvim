@@ -22,9 +22,9 @@ M.default_opts = {
     return fzf_lua.config.globals.actions.files
   end,
   actions = {
-    ["ctrl-g"] = { actions.toggle_go_to_cursor, fzf_lua.actions.resume },
-    ["ctrl-r"] = { actions.rename_key, fzf_lua.actions.resume },
-    ["ctrl-x"] = { actions.delete_key, fzf_lua.actions.resume },
+    ["ctrl-g"] = { fn = actions.toggle_go_to_cursor, reload = true },
+    ["ctrl-r"] = { fn = actions.rename_key, reload = true },
+    ["ctrl-x"] = { fn = actions.delete_key, reload = true },
   },
   -- actions listed below will be converted to fzf's 'reload'
   reload_actions = {
@@ -85,7 +85,7 @@ function M.marks(opts)
   -- build the "reload" cmd and remove '-- {+}' from the initial cmd
   local reload = fzf_lua.shell.reload_action_cmd(opts, "{+}")
   local contents = reload:gsub("%-%-%s+{%+}$", "")
-  opts = fzf_lua.core.convert_reload_actions(reload, opts)
+  opts.__reload_cmd = reload
 
   ----Yield to fzf-lua
   fzf_lua.fzf_exec(contents, opts)

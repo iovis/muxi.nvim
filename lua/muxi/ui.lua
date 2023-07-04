@@ -6,7 +6,8 @@ local util = require("muxi.util")
 ---Muxi superbinding
 ---If ASCII uppercase => save mark
 ---else => go to mark
-function M.superbinding()
+---@param opts? GoToOpts
+function M.superbinding(opts)
   local char = util.get_char()
 
   if not char then
@@ -24,7 +25,7 @@ function M.superbinding()
   end
 
   -- If lowercase, go to mark
-  require("muxi").go_to(char)
+  require("muxi").go_to(char, opts)
 end
 
 ---Use vim.ui.input to mark the current file

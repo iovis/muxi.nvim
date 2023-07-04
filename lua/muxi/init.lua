@@ -48,7 +48,6 @@ function muxi.go_to(key, opts)
     return
   end
 
-  -- TODO: Check if file still exists? It'll open a new buffer otherwise
   vim.cmd.edit(mark.file)
 
   -- Navigate to cursor

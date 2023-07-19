@@ -1,6 +1,7 @@
 local M = {}
 
 local muxi = require("muxi")
+local fs = require("muxi.fs")
 
 ---Extracts a key from an FZF line
 ---
@@ -44,6 +45,18 @@ function M.rename_key(selected)
 
     muxi.marks[new_key] = mark
   end)
+end
+
+function M.delete_session(selected)
+  local sessions = fs.read_stored_sessions(muxi.config.path) or {}
+
+  -- Delete selected sessions
+  for _, pwd in ipairs(selected) do
+    sessions[pwd] = nil
+  end
+
+  local json = vim.json.encode(sessions)
+  fs.write_file_sync(muxi.config.path, json)
 end
 
 return M

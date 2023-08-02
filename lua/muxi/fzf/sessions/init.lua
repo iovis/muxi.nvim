@@ -4,10 +4,12 @@ local actions = require("muxi.fzf.sessions.actions")
 local fs = require("muxi.fs")
 local fzf_lua = require("fzf-lua")
 local muxi = require("muxi")
+local SessionPreviewer = require("muxi.fzf.sessions.previewer")
 
 ---@class MuxiFzfSessionManagerOpts
 M.default_opts = {
   prompt = "muxi sessions> ",
+  -- previewer = SessionPreviewer, -- TODO: stack overflow?
   actions = {
     ["ctrl-x"] = { fn = actions.delete_session, reload = true },
   },

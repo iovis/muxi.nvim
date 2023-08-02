@@ -154,7 +154,9 @@ function M.sessions(opts)
 
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then
-    local header = (":: %s\n%s (current)"):format(table.concat(fzf_session_header_labels, " | "), fs.cwd())
+    local header_labels = table.concat(fzf_session_header_labels, " | ")
+    local current_session_label = fzf_lua.utils.ansi_codes.yellow("(current)")
+    local header = (":: %s\n%s %s"):format(header_labels, fs.cwd(), current_session_label)
 
     opts.fzf_opts["--header"] = vim.fn.shellescape(header)
   end

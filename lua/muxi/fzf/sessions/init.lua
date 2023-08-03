@@ -9,7 +9,11 @@ local SessionPreviewer = require("muxi.fzf.sessions.previewer")
 ---@class MuxiFzfSessionManagerOpts
 M.default_opts = {
   prompt = "muxi sessions> ",
-  -- previewer = SessionPreviewer, -- TODO: stack overflow?
+  previewer = {
+    _ctor = function()
+      return SessionPreviewer
+    end,
+  },
   actions = {
     ["ctrl-x"] = { fn = actions.delete_session, reload = true },
   },

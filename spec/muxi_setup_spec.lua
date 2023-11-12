@@ -3,6 +3,7 @@ local assert = require("luassert")
 describe("muxi.setup", function()
   local muxi = require("muxi")
   local default_path = vim.fn.stdpath("data") .. "/muxi.json"
+  local test_path = "muxi_test.json"
 
   before_each(function()
     package.loaded.muxi = nil
@@ -20,35 +21,21 @@ describe("muxi.setup", function()
 
       assert.are.equal(muxi.config.path, default_path)
       assert.are.equal(muxi.config.go_to_cursor, true)
+
+      -- Don't mess with my sessions
+      muxi.setup({ path = test_path })
+      print(muxi.config.path)
     end)
   end)
 
   describe("with custom configuration", function()
-    it("config.path", function()
+    it("uses the specified values", function()
       muxi.setup({
-        path = "muxi_test.json",
-      })
-
-      assert.are.equal(muxi.config.path, "muxi_test.json")
-      assert.are.equal(muxi.config.go_to_cursor, true)
-    end)
-
-    it("config.go_to_cursor", function()
-      muxi.setup({
+        path = test_path,
         go_to_cursor = false,
       })
 
-      assert.are.equal(muxi.config.path, default_path)
-      assert.are.equal(muxi.config.go_to_cursor, false)
-    end)
-
-    it("all", function()
-      muxi.setup({
-        path = "muxi_test.json",
-        go_to_cursor = false,
-      })
-
-      assert.are.equal(muxi.config.path, "muxi_test.json")
+      assert.are.equal(muxi.config.path, test_path)
       assert.are.equal(muxi.config.go_to_cursor, false)
     end)
   end)

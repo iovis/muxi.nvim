@@ -4,9 +4,10 @@ local assert = require("luassert")
 describe("muxi.add", function()
   local file_lorem = "spec/fixtures/lorem.txt"
   local file_morel = "spec/fixtures/morel.txt"
+  local test_path = "muxi_test.json"
 
   before_each(function()
-    muxi.setup({ path = "muxi_test.json" })
+    muxi.setup({ path = test_path })
     muxi.nuke()
     muxi:init()
   end)

@@ -1,4 +1,4 @@
-default: test
+default: watch
 
 # lists available tasks
 @list:
@@ -19,3 +19,6 @@ console:
 # run tests
 test path="spec/":
     nvim --headless -c "PlenaryBustedDirectory {{path}}"
+
+dev:
+    ls **/*.lua | entr -c nvim --headless -c "PlenaryBustedDirectory spec/"

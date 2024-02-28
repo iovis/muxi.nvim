@@ -6,9 +6,14 @@ local fs = require("muxi.fs")
 
 ---@class Muxi
 ---@field marks table<string, Mark>
+---@field config MuxiConfig
+---@field to_fzf_marks_list? fun(Muxi, MuxiFzfMarksOpts): string[]
+---@field to_fzf_sessions_list? fun(Muxi): string[]
 local muxi = {}
 
 ---@class MuxiConfig
+---@field path string
+---@field go_to_cursor boolean
 muxi.config = {
   path = vim.fn.stdpath("data") .. "/muxi.json",
   go_to_cursor = true,

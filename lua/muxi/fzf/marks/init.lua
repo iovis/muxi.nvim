@@ -64,7 +64,7 @@ function M.cmd(opts)
   -- FZF header (legend)
   if opts.fzf_opts["--header"] == nil then
     local header = (":: %s"):format(table.concat(fzf_header_labels, " | "))
-    opts.fzf_opts["--header"] = vim.fn.shellescape(header)
+    opts.fzf_opts["--header"] = header
   end
 
   ----Git status

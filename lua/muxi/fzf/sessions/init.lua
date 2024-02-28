@@ -45,7 +45,7 @@ function M.cmd(opts)
     local current_session_label = fzf_lua.utils.ansi_codes.yellow("(current)")
     local header = (":: %s\n%s %s"):format(header_labels, fs.cwd(), current_session_label)
 
-    opts.fzf_opts["--header"] = vim.fn.shellescape(header)
+    opts.fzf_opts["--header"] = header
   end
 
   ----Reload without flickering

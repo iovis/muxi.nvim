@@ -21,10 +21,7 @@ muxi.config = {
 
 ---@param opts MuxiConfig
 function muxi.setup(opts)
-  opts = opts or {}
-
-  muxi.config = vim.tbl_deep_extend("force", muxi.config, opts)
-
+  muxi.config = vim.tbl_deep_extend("force", muxi.config, opts or {})
   muxi:init()
 end
 
@@ -115,9 +112,10 @@ end
 ---Run a callback that syncs the store
 ---@param fn fun(muxi: Muxi): nil
 function muxi:sync(fn)
-  fn(self)
-
-  self:save()
+  vim.schedule(function()
+    fn(self)
+    self:save()
+  end)
 end
 
 return muxi

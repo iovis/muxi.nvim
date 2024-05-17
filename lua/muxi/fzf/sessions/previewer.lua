@@ -20,7 +20,7 @@ function SessionPreviewer:populate_preview_buf(entry_str)
   local session = vim.split(vim.inspect(self.sessions[entry_str]), "\n")
 
   vim.api.nvim_buf_set_lines(tmpbuf, 0, -1, false, session)
-  vim.api.nvim_buf_set_option(tmpbuf, "filetype", "lua")
+  vim.bo[tmpbuf].filetype = "lua"
 
   self:set_preview_buf(tmpbuf)
   self.win:update_scrollbar()

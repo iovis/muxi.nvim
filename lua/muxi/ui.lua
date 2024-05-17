@@ -69,7 +69,7 @@ function M.show()
 
   -- Set the contents to muxi table and the filetype to lua
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, marks_table)
-  vim.api.nvim_buf_set_option(bufnr, "filetype", "lua")
+  vim.bo[bufnr].filetype = "lua"
 
   -- Save new marks when leaving the popup
   local augroup_muxi = vim.api.nvim_create_augroup("muxi_marks", { clear = true })

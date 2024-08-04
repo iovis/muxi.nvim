@@ -94,6 +94,7 @@ end
 function muxi:init()
   local cwd = fs.cwd()
   self.marks = fs.read_stored_sessions(self.config.path)[cwd] or {}
+  self:marks_reverse_lookup()
 end
 
 -- TODO: Could be async
@@ -115,6 +116,22 @@ function muxi:save()
   fs.write_file_sync(self.config.path, json)
 end
 
+---Create a reverse lookup of Muxi marks
+---@private
+function muxi:marks_reverse_lookup()
+  local files = {}
+
+  for key, mark in pairs(self.marks) do
+    if files[mark.file] then
+      table.insert(files[mark.file], key)
+    else
+      files[mark.file] = { key }
+    end
+  end
+
+  self.marked_files = files
+end
+
 ---Run a callback that syncs the store
 ---@private
 ---@param fn fun(muxi: Muxi): nil
@@ -122,6 +139,7 @@ function muxi:sync(fn)
   vim.schedule(function()
     fn(self)
     self:save()
+    self:marks_reverse_lookup()
   end)
 end
 

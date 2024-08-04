@@ -6,7 +6,7 @@ local util = require("muxi.util")
 ---Muxi superbinding
 ---If ASCII uppercase => save mark
 ---else => go to mark
----@param opts? GoToOpts
+---@param opts? MuxiGoToOpts
 function M.superbinding(opts)
   local char = util.get_char()
 

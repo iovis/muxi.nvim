@@ -1,11 +1,15 @@
 local fs = require("muxi.fs")
 
----@class Mark
----@field file string
+---@alias MuxiFile string
+---@alias MuxiKey string
+
+---@class MuxiMark
+---@field file MuxiFile
 ---@field pos number[]
 
 ---@class Muxi
----@field marks table<string, Mark>
+---@field marks table<MuxiKey, MuxiMark>
+---@field marked_files table<MuxiFile, MuxiKey[]>
 ---@field config MuxiConfig
 ---@field to_fzf_marks_list? fun(Muxi, MuxiFzfMarksOpts): string[]
 ---@field to_fzf_sessions_list? fun(Muxi): string[]
@@ -36,12 +40,12 @@ function muxi.add(key)
   end)
 end
 
----@class GoToOpts
+---@class MuxiGoToOpts
 ---@field go_to_cursor? boolean
 
 ---Go to session
 ---@param key string
----@param opts? GoToOpts
+---@param opts? MuxiGoToOpts
 function muxi.go_to(key, opts)
   local mark = muxi.marks[key]
 
@@ -86,12 +90,14 @@ function muxi.nuke()
   vim.fn.delete(muxi.config.path)
 end
 
+---@private
 function muxi:init()
   local cwd = fs.cwd()
   self.marks = fs.read_stored_sessions(self.config.path)[cwd] or {}
 end
 
 -- TODO: Could be async
+---@private
 function muxi:save()
   -- Read all the sessions to avoid sync issues
   local cwd = fs.cwd()
@@ -110,6 +116,7 @@ function muxi:save()
 end
 
 ---Run a callback that syncs the store
+---@private
 ---@param fn fun(muxi: Muxi): nil
 function muxi:sync(fn)
   vim.schedule(function()

@@ -1,6 +1,6 @@
 ---@class MuxiFzfRow
 ---@field key string
----@field mark Mark
+---@field mark MuxiMark
 ---@field filename string for `fzf_lua.make_entry.lcol`
 ---@field lnum number for `fzf_lua.make_entry.lcol`
 ---@field col number for `fzf_lua.make_entry.lcol`
@@ -8,7 +8,7 @@ local MuxiFzfRow = {}
 
 ---Initialize a new MuxiFzfRow
 ---@param key string
----@param mark Mark
+---@param mark MuxiMark
 ---@return MuxiFzfRow
 function MuxiFzfRow:new(key, mark)
   local instance = {

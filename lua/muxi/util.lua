@@ -8,7 +8,7 @@ function M.is_upper(char)
 end
 
 ---Get one character from user
----@return string|nil
+---@return string?
 function M.get_char()
   local ok, char = pcall(vim.fn.getcharstr)
 

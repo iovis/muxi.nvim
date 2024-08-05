@@ -7,10 +7,6 @@
       - [ ] lspsaga
       - [ ] mini.jump
   - [ ] Generate vimdocs from README.md?
-- [ ] Cleanup
-  - [ ] `examples/`
-  - [ ] `tests/`
-  - [ ] `notes/`
 
 ### Done
 
@@ -90,7 +86,7 @@
 ### Superbinding Example
 
 ```lua
-vim.keymap.set("n", "gm", function ()
+vim.keymap.set("n", "gm", function()
   vim.print("key is: " .. vim.pesc(vim.fn.getcharstr()))
 end)
 ```
@@ -109,7 +105,7 @@ print(vim.fn.reltimestr(vim.fn.reltime(start)))
 local x = os.clock()
 local s = 0
 
-for i=1,100000 do
+for i = 1, 100000 do
   s = s + i
 end
 

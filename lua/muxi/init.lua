@@ -1,11 +1,15 @@
 local fs = require("muxi.fs")
 
----@class Mark
----@field file string
+---@alias MuxiFile string
+---@alias MuxiKey string
+
+---@class MuxiMark
+---@field file MuxiFile
 ---@field pos number[]
 
 ---@class Muxi
----@field marks table<string, Mark>
+---@field marks table<MuxiKey, MuxiMark>
+---@field marked_files table<MuxiFile, MuxiKey[]>
 ---@field config MuxiConfig
 ---@field to_fzf_marks_list? fun(Muxi, MuxiFzfMarksOpts): string[]
 ---@field to_fzf_sessions_list? fun(Muxi): string[]
@@ -23,6 +27,14 @@ muxi.config = {
 function muxi.setup(opts)
   muxi.config = vim.tbl_deep_extend("force", muxi.config, opts or {})
   muxi:init()
+
+  -- Re exports
+  muxi.ui = require("muxi.ui")
+
+  local fzf_installed, _ = pcall(require, "fzf-lua")
+  if fzf_installed then
+    muxi.fzf = require("muxi.fzf")
+  end
 end
 
 ---Add the current file to a key
@@ -36,12 +48,12 @@ function muxi.add(key)
   end)
 end
 
----@class GoToOpts
+---@class MuxiGoToOpts
 ---@field go_to_cursor? boolean
 
 ---Go to session
 ---@param key string
----@param opts? GoToOpts
+---@param opts? MuxiGoToOpts
 function muxi.go_to(key, opts)
   local mark = muxi.marks[key]
 
@@ -86,12 +98,15 @@ function muxi.nuke()
   vim.fn.delete(muxi.config.path)
 end
 
+---@private
 function muxi:init()
   local cwd = fs.cwd()
   self.marks = fs.read_stored_sessions(self.config.path)[cwd] or {}
+  self:marks_reverse_lookup()
 end
 
 -- TODO: Could be async
+---@private
 function muxi:save()
   -- Read all the sessions to avoid sync issues
   local cwd = fs.cwd()
@@ -109,12 +124,30 @@ function muxi:save()
   fs.write_file_sync(self.config.path, json)
 end
 
+---Create a reverse lookup of Muxi marks
+---@private
+function muxi:marks_reverse_lookup()
+  local files = {}
+
+  for key, mark in pairs(self.marks) do
+    if files[mark.file] then
+      table.insert(files[mark.file], key)
+    else
+      files[mark.file] = { key }
+    end
+  end
+
+  self.marked_files = files
+end
+
 ---Run a callback that syncs the store
+---@private
 ---@param fn fun(muxi: Muxi): nil
 function muxi:sync(fn)
   vim.schedule(function()
     fn(self)
     self:save()
+    self:marks_reverse_lookup()
   end)
 end
 

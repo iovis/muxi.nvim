@@ -6,8 +6,8 @@ local util = require("muxi.util")
 ---Muxi superbinding
 ---If ASCII uppercase => save mark
 ---else => go to mark
----@param opts? GoToOpts
-function M.superbinding(opts)
+---@param opts? MuxiGoToOpts
+function M.run(opts)
   local char = util.get_char()
 
   if not char then
@@ -25,26 +25,24 @@ function M.superbinding(opts)
   end
 
   -- If lowercase, go to mark
-  require("muxi").go_to(char, opts)
+  muxi.go_to(char, opts)
 end
 
----Use vim.ui.input to mark the current file
-function M.add()
-  vim.ui.input({ prompt = "Muxi key> " }, function(input)
-    local key = vim.trim(input or "")
+---Delete mark superbinding
+function M.quick_delete()
+  local char = util.get_char()
 
-    if vim.fn.empty(key) == 1 then
-      return
-    end
+  if not char then
+    return
+  end
 
-    muxi.add(key)
+  muxi.delete(char)
 
-    vim.notify("Added current file to " .. key)
-  end)
+  vim.notify("Deleted mark " .. char)
 end
 
 ---Show an interactive popup to edit your marks
-function M.show()
+function M.edit()
   -- Serialize muxi marks into a pretty array of strings
   local marks_table = vim.split(vim.inspect(muxi.marks), "\n")
 

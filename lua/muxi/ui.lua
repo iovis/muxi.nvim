@@ -18,8 +18,9 @@ function M.run(opts)
   if util.is_upper(char) then
     local key = char:lower()
 
-    muxi.add(key)
-    vim.notify("Added current file to " .. key)
+    if muxi.add(key) then
+      vim.notify("Added current file to " .. key)
+    end
 
     return
   end

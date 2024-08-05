@@ -39,13 +39,23 @@ end
 
 ---Add the current file to a key
 ---@param key string
+---@return boolean success?
 function muxi.add(key)
+  local file = vim.fn.expand("%")
+
+  if vim.fn.empty(file) == 1 then
+    vim.notify("[muxi] no file", vim.log.levels.ERROR)
+    return false
+  end
+
   muxi:sync(function(m)
     m.marks[key] = {
-      file = vim.fn.expand("%"),
+      file = file,
       pos = vim.api.nvim_win_get_cursor(0),
     }
   end)
+
+  return true
 end
 
 ---@class MuxiGoToOpts

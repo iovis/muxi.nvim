@@ -27,6 +27,14 @@ muxi.config = {
 function muxi.setup(opts)
   muxi.config = vim.tbl_deep_extend("force", muxi.config, opts or {})
   muxi:init()
+
+  -- Re exports
+  muxi.ui = require("muxi.ui")
+
+  local fzf_installed, _ = pcall(require, "fzf-lua")
+  if fzf_installed then
+    muxi.fzf = require("muxi.fzf")
+  end
 end
 
 ---Add the current file to a key

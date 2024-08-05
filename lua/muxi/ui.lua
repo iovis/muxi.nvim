@@ -28,9 +28,17 @@ function M.run(opts)
   muxi.go_to(char, opts)
 end
 
+---Delete mark superbinding
+function M.quick_delete()
+  local char = util.get_char()
 
+  if not char then
+    return
+  end
 
+  muxi.delete(char)
 
+  vim.notify("Deleted mark " .. char)
 end
 
 ---Show an interactive popup to edit your marks

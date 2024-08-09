@@ -11,6 +11,7 @@ M.default_opts = {
   file_icons = true,
   color_icons = true,
   git_icons = true,
+  fzf_opts = { ["--multi"] = true },
   previewer = "builtin",
   _actions = function()
     -- Inherit current file actions (overridable by the user)

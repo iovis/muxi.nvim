@@ -17,6 +17,9 @@ local subcommands = {
   fzf = function()
     require("muxi.fzf").marks()
   end,
+  qf = function()
+    require("muxi.ui").qf()
+  end,
 }
 
 function command.command_list()

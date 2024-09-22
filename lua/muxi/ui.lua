@@ -42,6 +42,38 @@ function M.quick_delete()
   vim.notify("Deleted mark " .. char)
 end
 
+---Show marks in quickfix list
+function M.qf()
+  local marks = vim
+    .iter(muxi.marks)
+    :map(function(key, mark)
+      return {
+        filename = mark.file,
+        lnum = mark.pos[1],
+        col = mark.pos[2],
+        text = key,
+        user_data = key,
+      }
+    end)
+    :totable()
+
+  -- sort by filename and line number
+  table.sort(marks, function(a, b)
+    if a.filename ~= b.filename then
+      return a.filename < b.filename
+    end
+
+    return a.lnum < b.lnum
+  end)
+
+  vim.fn.setqflist({}, "r", {
+    title = "muxi marks",
+    items = marks,
+  })
+
+  vim.cmd("botright copen")
+end
+
 ---Show an interactive popup to edit your marks
 function M.edit()
   -- Serialize muxi marks into a pretty array of strings

@@ -229,7 +229,7 @@ function muxi:set_buf_signs(bufnr)
         })
       end
 
-      vim.api.nvim_buf_set_extmark(bufnr, self.config.namespace, mark.pos[1] - 1, mark.pos[2], opts)
+      vim.api.nvim_buf_set_extmark(bufnr, self.config.namespace, mark.pos[1] - 1, 0, opts)
     end)
 
     if not ok then

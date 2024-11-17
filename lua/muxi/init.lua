@@ -107,7 +107,7 @@ end
 ---Marks for current file
 ---@return MuxiMark[]
 function muxi.marks_for_current_file()
-  return muxi.marked_files[vim.fn.expand("%:.")]
+  return muxi.marked_files[vim.fn.expand("%:.")] or {}
 end
 
 ---Delete mark

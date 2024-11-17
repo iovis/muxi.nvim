@@ -50,7 +50,7 @@ local fzf_header_labels = {
 ---@param opts? MuxiFzfMarksOpts
 function M.cmd(opts)
   if vim.tbl_isempty(muxi.marks) then
-    vim.notify("No marks for this session", vim.log.levels.WARN)
+    vim.notify("[muxi] no marks for this session", vim.log.levels.WARN)
     return
   end
 

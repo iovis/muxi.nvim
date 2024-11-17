@@ -84,7 +84,7 @@ function muxi.go_to(key, opts)
   local mark = muxi.marks[key]
 
   if not mark then
-    vim.notify("No mark found for " .. key)
+    vim.notify("[muxi] no mark found for " .. key)
     return
   end
 
@@ -96,12 +96,18 @@ function muxi.go_to(key, opts)
   if config.go_to_cursor then
     local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
     if not cursor_ok then
-      vim.notify("[muxi] position doesn't exist anymore!")
+      vim.notify("[muxi] position doesn't exist anymore! { " .. vim.iter(mark.pos):join(", ") .. " }")
     end
   end
 
   -- Center cursor
   vim.cmd("norm! zz")
+end
+
+---Marks for current file
+---@return MuxiMark[]
+function muxi.marks_for_current_file()
+  return muxi.marked_files[vim.fn.expand("%:.")]
 end
 
 ---Delete mark
@@ -232,10 +238,10 @@ function muxi:set_buf_signs(bufnr)
       vim.api.nvim_buf_set_extmark(bufnr, self.config.namespace, mark.pos[1] - 1, 0, opts)
     end)
 
-    if not ok then
+    if not ok and false then
       vim.print(file)
       vim.print(mark)
-      vim.notify(result --[[@as string]], vim.log.levels.WARN)
+      vim.notify("[muxi] " .. result --[[@as string]], vim.log.levels.WARN)
     end
   end)
 end

@@ -1,7 +1,7 @@
 -- Integration with https://github.com/ibhagwan/fzf-lua
 local fzf_installed, _ = pcall(require, "fzf-lua")
 if not fzf_installed then
-  vim.notify("fzf-lua not found!", vim.log.levels.ERROR)
+  vim.notify("[muxi] fzf-lua not found!", vim.log.levels.ERROR)
   return
 end
 

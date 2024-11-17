@@ -5,7 +5,11 @@ local util = require("muxi.util")
 
 ---Muxi superbinding
 ---If ASCII uppercase => save mark
----else => go to mark
+---else
+---  if visual
+---    => go to mark in the same file
+---  else
+---    => go to mark
 ---@param opts? MuxiGoToOpts
 function M.run(opts)
   local char = util.get_char()
@@ -19,14 +23,34 @@ function M.run(opts)
     local key = char:lower()
 
     if muxi.add(key) then
-      vim.notify("Added current file to " .. key)
+      vim.notify("[muxi] added current file to " .. key)
     end
 
     return
   end
 
   -- If lowercase, go to mark
-  muxi.go_to(char, opts)
+  local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
+
+  if mode == "v" then
+    local mark = muxi.marks[char]
+    local current_file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":.")
+
+    if not mark then
+      vim.notify("[muxi] no mark found for " .. char)
+      return
+    elseif current_file ~= mark.file then
+      vim.notify("[muxi] mark points to a different file (" .. mark.file .. ")")
+      return
+    end
+
+    local cursor_ok, _ = pcall(vim.api.nvim_win_set_cursor, 0, mark.pos)
+    if not cursor_ok then
+      vim.notify("[muxi] position doesn't exist anymore! { " .. vim.iter(mark.pos):join(", ") .. " }")
+    end
+  else
+    muxi.go_to(char, opts)
+  end
 end
 
 ---Delete mark superbinding
@@ -39,7 +63,7 @@ function M.quick_delete()
 
   muxi.delete(char)
 
-  vim.notify("Deleted mark " .. char)
+  vim.notify("[muxi] deleted mark " .. char)
 end
 
 ---Show marks in quickfix list
@@ -121,7 +145,7 @@ function M.edit()
         m.marks = new_marks
       end)
 
-      vim.notify("muxi updated")
+      vim.notify("[muxi] updated")
     end,
   })
 
@@ -148,7 +172,7 @@ function M.delete_prompt()
   local marks = get_current_marks_for_selection()
 
   if vim.tbl_isempty(marks) then
-    vim.notify("No marks for this session!")
+    vim.notify("[muxi] no marks for this session!")
     return
   end
 
@@ -167,7 +191,7 @@ function M.go_to_prompt()
   local marks = get_current_marks_for_selection()
 
   if vim.tbl_isempty(marks) then
-    vim.notify("No marks for this session!")
+    vim.notify("[muxi] no marks for this session!")
     return
   end
 

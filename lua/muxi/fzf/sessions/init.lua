@@ -9,12 +9,14 @@ local SessionPreviewer = require("muxi.fzf.sessions.previewer")
 ---@class MuxiFzfSessionManagerOpts
 M.default_opts = {
   prompt = "muxi sessions> ",
+  fzf_opts = { ["--multi"] = true },
   previewer = {
     _ctor = function()
       return SessionPreviewer
     end,
   },
   actions = {
+    ["enter"] = actions.open_in_tmux_window,
     ["ctrl-x"] = { fn = actions.delete_session, reload = true },
   },
   reload_actions = {
@@ -37,6 +39,7 @@ function M.cmd(opts)
 
   ----Help
   -- Register custom labels for help menu
+  fzf_lua.config.set_action_helpstr(actions.open_in_tmux_window, "muxi-open-in-tmux-window")
   fzf_lua.config.set_action_helpstr(actions.delete_session, "muxi-delete-session")
 
   -- FZF header (legend)

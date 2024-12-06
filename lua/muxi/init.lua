@@ -21,7 +21,7 @@ local fs = require("muxi.fs")
 local muxi = {}
 
 vim.api.nvim_set_hl(0, "MuxiSign", { fg = "#ef9f76" })
-vim.api.nvim_set_hl(0, "MuxiVirtualText", { fg = "#99d1db", bold = true })
+vim.api.nvim_set_hl(0, "MuxiVirtualText", { fg = "#ef9f76", bold = true })
 
 ---@class MuxiConfig
 ---@field namespace number
@@ -30,6 +30,7 @@ vim.api.nvim_set_hl(0, "MuxiVirtualText", { fg = "#99d1db", bold = true })
 ---@field signs MuxiSignOptions?
 muxi.config = {
   namespace = vim.api.nvim_create_namespace("muxi"),
+  visual_namespace = vim.api.nvim_create_namespace("muxi_visual"),
   path = vim.fn.stdpath("data") .. "/muxi.json",
   go_to_cursor = true,
   signs = {

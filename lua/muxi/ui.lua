@@ -12,7 +12,28 @@ local util = require("muxi.util")
 ---    => go to mark
 ---@param opts? MuxiGoToOpts
 function M.run(opts)
+  local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
+
+  if mode == "v" then
+    local bufnr = vim.api.nvim_get_current_buf()
+    local file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":.")
+    local marks = muxi.marked_files[file] or {}
+
+    vim.iter(marks):each(function(mark)
+      vim.api.nvim_buf_set_extmark(bufnr, muxi.config.visual_namespace, mark.pos[1] - 1, mark.pos[2], {
+        strict = false,
+        hl_mode = "combine",
+        virt_text_pos = "overlay",
+        virt_text = {
+          { mark.key, "MuxiVirtualText" },
+        },
+      })
+    end)
+  end
+
   local char = util.get_char()
+
+  vim.api.nvim_buf_clear_namespace(0, muxi.config.visual_namespace, 0, -1)
 
   if not char then
     return
@@ -30,8 +51,6 @@ function M.run(opts)
   end
 
   -- If lowercase, go to mark
-  local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
-
   if mode == "v" then
     local mark = muxi.marks[char]
     local current_file = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":.")

@@ -10,6 +10,8 @@ end
 ---Get one character from user
 ---@return string?
 function M.get_char()
+  vim.cmd("redraw")
+
   local ok, char = pcall(vim.fn.getcharstr)
 
   -- Terminate if couldn't get input (like with <C-c>) or it is `<Esc>`

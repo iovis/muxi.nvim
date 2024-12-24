@@ -10,7 +10,7 @@ local util = require("muxi.util")
 ---    => go to mark in the same file
 ---  else
 ---    => go to mark
----@param opts? MuxiGoToOpts
+---@param opts? muxi.go_to.Opts
 function M.run(opts)
   local mode = vim.fn.strtrans(vim.fn.mode()):lower():gsub("%W", "")
 

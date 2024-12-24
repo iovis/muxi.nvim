@@ -1,33 +1,33 @@
 local fs = require("muxi.fs")
 
----@alias MuxiFile string
----@alias MuxiKey string
+---@alias muxi.file string
+---@alias muxi.key string
 
----@class MuxiMark
----@field file MuxiFile
----@field key MuxiKey
+---@class muxi.Mark
+---@field file muxi.file
+---@field key muxi.key
 ---@field pos number[]
 
----@class MuxiSignOptions
+---@class muxi.sign.Options
 ---@field sign_column boolean
 ---@field virtual_text boolean
 
 ---@class Muxi
----@field marks table<MuxiKey, MuxiMark>
----@field marked_files table<MuxiFile, MuxiMark[]>
----@field config MuxiConfig
----@field to_fzf_marks_list? fun(Muxi, MuxiFzfMarksOpts): string[]
+---@field marks table<muxi.key, muxi.Mark>
+---@field marked_files table<muxi.file, muxi.Mark[]>
+---@field config muxi.Config
+---@field to_fzf_marks_list? fun(Muxi, muxi.fzf.marks.Opts): string[]
 ---@field to_fzf_sessions_list? fun(Muxi): string[]
 local muxi = {}
 
 vim.api.nvim_set_hl(0, "MuxiSign", { fg = "#ef9f76" })
 vim.api.nvim_set_hl(0, "MuxiVirtualText", { fg = "#ef9f76", bold = true })
 
----@class MuxiConfig
+---@class muxi.Config
 ---@field namespace number
 ---@field path string
 ---@field go_to_cursor boolean
----@field signs MuxiSignOptions?
+---@field signs muxi.sign.Options?
 muxi.config = {
   namespace = vim.api.nvim_create_namespace("muxi"),
   visual_namespace = vim.api.nvim_create_namespace("muxi_visual"),
@@ -39,7 +39,7 @@ muxi.config = {
   },
 }
 
----@param opts MuxiConfig
+---@param opts muxi.Config
 function muxi.setup(opts)
   muxi.config = vim.tbl_deep_extend("force", muxi.config, opts or {})
   muxi:init()
@@ -54,7 +54,7 @@ function muxi.setup(opts)
 end
 
 ---Add the current file to a key
----@param key string
+---@param key muxi.key
 ---@return boolean success?
 function muxi.add(key)
   local file = vim.fn.expand("%:.")
@@ -75,12 +75,12 @@ function muxi.add(key)
   return true
 end
 
----@class MuxiGoToOpts
+---@class muxi.go_to.Opts
 ---@field go_to_cursor? boolean
 
 ---Go to session
----@param key string
----@param opts? MuxiGoToOpts
+---@param key muxi.key
+---@param opts? muxi.go_to.Opts
 function muxi.go_to(key, opts)
   local mark = muxi.marks[key]
 
@@ -106,13 +106,13 @@ function muxi.go_to(key, opts)
 end
 
 ---Marks for current file
----@return MuxiMark[]
+---@return muxi.Mark[]
 function muxi.marks_for_current_file()
   return muxi.marked_files[vim.fn.expand("%:.")] or {}
 end
 
 ---Delete mark
----@param key string
+---@param key muxi.key
 function muxi.delete(key)
   muxi:sync(function(m)
     m.marks[key] = nil

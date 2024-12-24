@@ -5,7 +5,7 @@ local actions = require("muxi.fzf.marks.actions")
 local fzf_lua = require("fzf-lua")
 local muxi = require("muxi")
 
----@class MuxiFzfMarksOpts
+---@class muxi.fzf.marks.Opts
 M.default_opts = {
   prompt = "muxi> ",
   file_icons = true,
@@ -47,7 +47,7 @@ local fzf_header_labels = {
 }
 
 ---Show muxi marks in fzf-lua
----@param opts? MuxiFzfMarksOpts
+---@param opts? muxi.fzf.marks.Opts
 function M.cmd(opts)
   if vim.tbl_isempty(muxi.marks) then
     vim.notify("[muxi] no marks for this session", vim.log.levels.WARN)
@@ -88,10 +88,10 @@ function M.cmd(opts)
 end
 
 ---Convert muxi marks to an fzf list (monkey patch)
----@param opts MuxiFzfMarksOpts
+---@param opts muxi.fzf.marks.Opts
 ---@return string[]
 function muxi:to_fzf_marks_list(opts)
-  ---@type MuxiFzfRow[]
+  ---@type muxi.fzf.Row[]
   local entries = {}
 
   -- Make a list of muxi marks parseable by fzf

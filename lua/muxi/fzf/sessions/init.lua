@@ -6,7 +6,7 @@ local fzf_lua = require("fzf-lua")
 local muxi = require("muxi")
 local SessionPreviewer = require("muxi.fzf.sessions.previewer")
 
----@class MuxiFzfSessionManagerOpts
+---@class muxi.fzf.session_manager.Opts
 M.default_opts = {
   prompt = "muxi sessions> ",
   fzf_opts = { ["--multi"] = true },
@@ -33,7 +33,7 @@ local fzf_header_labels = {
 }
 
 ---Manage muxi sessions
----@param opts? MuxiFzfSessionManagerOpts
+---@param opts? muxi.fzf.session_manager.Opts
 function M.cmd(opts)
   opts = fzf_lua.config.normalize_opts(opts, M.default_opts)
 
@@ -68,7 +68,7 @@ end
 ---Convert muxi marks to an fzf list (monkey patch)
 ---@return string[]
 function muxi:to_fzf_sessions_list()
-  -- TODO: ---@type MuxiFzfRow[]
+  -- TODO: ---@type muxi.fzf.Row[]
   local entries = fs.read_stored_sessions(self.config.path) or {}
   local cwd = fs.cwd()
 

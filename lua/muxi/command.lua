@@ -1,4 +1,4 @@
---Shamelessly copied from lspsaga
+-- Shamelessly copied from lspsaga
 local command = {}
 
 local subcommands = {

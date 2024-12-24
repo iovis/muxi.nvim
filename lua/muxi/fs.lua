@@ -19,7 +19,7 @@ local function read_file_sync(path)
 end
 
 ---@param path string
----@return table<string, MuxiMark[]>
+---@return table<string, muxi.Mark[]>
 function M.read_stored_sessions(path)
   local data = read_file_sync(path)
   if not data then

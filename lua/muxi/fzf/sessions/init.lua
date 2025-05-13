@@ -4,17 +4,12 @@ local actions = require("muxi.fzf.sessions.actions")
 local fs = require("muxi.fs")
 local fzf_lua = require("fzf-lua")
 local muxi = require("muxi")
-local SessionPreviewer = require("muxi.fzf.sessions.previewer")
 
 ---@class muxi.fzf.session_manager.Opts
 M.default_opts = {
   prompt = "muxi sessions> ",
   fzf_opts = { ["--multi"] = true },
-  previewer = {
-    _ctor = function()
-      return SessionPreviewer
-    end,
-  },
+  preview = "eza -la --git --group-directories-first --icons --color=always {1}",
   actions = {
     ["enter"] = actions.open_in_tmux_window,
     ["ctrl-x"] = { fn = actions.delete_session, reload = true },

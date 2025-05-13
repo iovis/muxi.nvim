@@ -73,9 +73,14 @@ function muxi:to_fzf_sessions_list()
   local cwd = fs.cwd()
 
   local sessions = {}
-  for key, _ in pairs(entries) do
-    if key ~= cwd then
-      table.insert(sessions, key)
+  for path, _ in pairs(entries) do
+    if path ~= cwd then
+      -- Dim if it doesn't exist anymore
+      if not vim.uv.fs_stat(path) then
+        path = fzf_lua.utils.ansi_codes.grey(path)
+      end
+
+      table.insert(sessions, path)
     end
   end
 

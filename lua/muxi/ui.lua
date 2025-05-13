@@ -124,17 +124,15 @@ function M.edit()
 
   -- Make a popup window
   local bufnr = vim.api.nvim_create_buf(false, true)
-  local half_screen_width = math.floor(vim.o.columns / 2)
-  local half_screen_height = math.floor(vim.o.lines / 2)
-  local width = half_screen_width
-  local height = math.max(math.min(half_screen_height, #marks_table), 10)
+  local width = math.floor(vim.o.columns / 2)
+  local height = math.floor(vim.o.lines / 2)
 
   vim.api.nvim_open_win(bufnr, true, {
     relative = "editor",
     width = width,
     height = height,
     row = 10,
-    col = half_screen_width - math.floor(width / 2) - 6,
+    col = width - math.floor(width / 2) - 6,
     style = "minimal",
     border = "rounded",
     title = " muxi ",

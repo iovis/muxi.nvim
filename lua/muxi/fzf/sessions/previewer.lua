@@ -23,7 +23,7 @@ function SessionPreviewer:populate_preview_buf(entry_str)
   vim.bo[tmpbuf].filetype = "lua"
 
   self:set_preview_buf(tmpbuf)
-  self.win:update_scrollbar()
+  self.win:update_preview_scrollbar()
 end
 
 -- Disable line numbering and word wrap

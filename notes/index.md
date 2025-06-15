@@ -58,6 +58,7 @@
   - [x] If it's lowercase and mark exists: go there
   - [x] If it's lowercase and mark does not exist: notify it's not set
   - Copy something like `mini.jump`
+- [x] Integrate with Snacks.picker
 
 ### Canceled
 

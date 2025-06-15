@@ -51,12 +51,18 @@ function muxi.setup(opts)
   if fzf_installed then
     muxi.fzf = require("muxi.fzf")
   end
+
+  require("muxi.snacks")
 end
 
 ---Add the current file to a key
 ---@param key muxi.key
 ---@return boolean success?
 function muxi.add(key)
+  if not key or vim.fn.empty(key) == 1 then
+    return false
+  end
+
   local file = vim.fn.expand("%:.")
 
   if vim.fn.empty(file) == 1 then

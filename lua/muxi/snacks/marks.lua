@@ -4,13 +4,16 @@ local muxi = require("muxi")
 
 local M = {}
 
----@class snacks.picker.todo.Config: snacks.picker.grep.Config
----@field keywords? string[]
-
----@type snacks.picker.todo.Config|{}
+---@type snacks.picker.Config
 M.source = {
   name = "muxi",
+  focus = "input",
   format = "file",
+  sort = { fields = { "key" } },
+  matcher = {
+    filename_bonus = false,
+    sort_empty = true,
+  },
   finder = function(_opts)
     ---@type muxi.Mark[]
     local marks = muxi.marks
@@ -27,10 +30,6 @@ M.source = {
         key = mark.key,
       }
     end
-
-    table.sort(items, function(a, b)
-      return a.label < b.label
-    end)
 
     return items
   end,

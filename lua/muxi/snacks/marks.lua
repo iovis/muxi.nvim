@@ -126,6 +126,14 @@ M.source = {
         r = "muxi_rename",
       },
     },
+    list = {
+      keys = {
+        ["<c-x>"] = "muxi_delete",
+        a = "muxi_add",
+        d = "muxi_delete",
+        r = "muxi_rename",
+      },
+    },
   },
 }
 

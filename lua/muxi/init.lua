@@ -148,7 +148,14 @@ function muxi:init()
 
     local muxi_augroup = vim.api.nvim_create_augroup("muxi", { clear = true })
 
-    vim.api.nvim_create_autocmd("BufRead", {
+    local events = {
+      "BufReadPost",
+      "BufWinEnter",
+      "InsertLeave",
+      "TextChanged",
+    }
+
+    vim.api.nvim_create_autocmd(events, {
       desc = "Render muxi marks",
       group = muxi_augroup,
       pattern = "*",
